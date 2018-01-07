@@ -10,7 +10,7 @@
           <input class="weui-input" type="text"
             style="text-align:right;"
             placeholder="请输入姓名"
-            value="李小明"/>
+            :value="proName"/>
         </div>
       </div>
       <div class="weui-cell">
@@ -19,12 +19,12 @@
         </div>
         <div class="weui-cell__bd" style="display:flex;justify-content:flex-end;">
           <div style="margin-right: 15px;">
-            <input v-model="sex" value="0" id="boy" type="radio"
+            <input v-model="proSex" value="1" id="boy" type="radio"
               style=""/>
             <label for="boy">男</label>
           </div>
           <div>
-            <input v-model="sex" value="1" id="girl" type="radio"/>
+            <input v-model="proSex" value="2" id="girl" type="radio"/>
             <label for="girl">女</label>
           </div>
         </div>
@@ -36,7 +36,8 @@
         <div class="weui-cell__bd">
           <input class="weui-input" type="text"
             style="text-align:right;"
-            placeholder="请输入验证码"/>
+            placeholder="请输入验证码"
+            :value="proBirthday"/>
         </div>
       </div>
     </div>
@@ -44,7 +45,7 @@
     <a class="weui-btn weui-btn_plain-primary"
       style="width: 320px;"
       :style="[{'border': '1px solid' + theme}, {'color': theme}]"
-      href="javascript:;">进入微信卡包</a>
+      href="javascript:;">保存</a>
   </div>
 </template>
 
@@ -52,9 +53,22 @@
 export default {
   data () {
     return {
-      theme: '#32b16c',
-      sex: 0
+      theme: '',
+      proName: '',
+      proSex: 0,
+      proBirthday: ''
     }
+  },
+  methods: {
+    getTheme () {
+      this.theme = localStorage.getItem('theme')
+    }
+  },
+  created () {
+    this.getTheme()
+    this.proName = this.$route.query.proName
+    this.proSex = this.$route.query.proSex
+    this.proBirthday = this.$route.query.proBirthday
   }
 }
 </script>

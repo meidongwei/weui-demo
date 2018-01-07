@@ -5,11 +5,13 @@
       <div class="card-header">
         <div class="card-logo-box">
           <div class="card-logo">
-            <img src="../assets/logo.png" alt="logo">
+            <img :src="cardLogoSrc" alt="logo">
           </div>
           <div class="card-words">
-            <h3>渝乡辣婆婆</h3>
-            <p>普通会员</p>
+            <h3>{{ cardName }}</h3>
+            <p v-if="cardType === 1">普通会员</p>
+            <p v-if="cardType === 2">高级会员</p>
+            <p v-if="cardType === 3">铂金会员</p>
           </div>
         </div>
         <router-link to="/qrCode" class="card-qrcode-box">
@@ -17,18 +19,18 @@
         </router-link>
       </div>
       <div class="card-num-box">
-        <p>8000000000000001</p>
+        <p>{{ cardNum }}</p>
       </div>
     </div>
     <!-- 积分和预存 -->
     <div class="weui-flex">
       <div class="weui-flex__item score">
         <p>积分</p>
-        <h3>254</h3>
+        <h3>{{ score }}</h3>
       </div>
       <div class="weui-flex__item prestore">
         <p>预存</p>
-        <h3>1000</h3>
+        <h3>{{ prestore }}</h3>
       </div>
     </div>
     <!-- 带说明、跳转的列表项 -->
@@ -37,7 +39,9 @@
         <div class="weui-cell__bd">
           <p>个人资料</p>
         </div>
-        <div class="weui-cell__ft">完善信息</div>
+        <div class="weui-cell__ft">
+          <span v-if="isShow">完善信息</span>
+        </div>
       </router-link>
       <router-link to="/consume" class="weui-cell weui-cell_access">
         <div class="weui-cell__bd">
@@ -69,14 +73,50 @@
 <script>
 import 'vue-awesome/icons/qrcode'
 import Icon from 'vue-awesome/components/Icon'
+import axios from 'axios'
+import { httpUrl } from '@/http_url'
 export default {
   components: {
     Icon
   },
   data () {
     return {
-      theme: '#32b16c'
+      theme: '',
+      cardName: '',
+      cardType: 0,
+      cardLogoSrc: '',
+      cardNum: 0,
+      score: 0,
+      prestore: 0,
+      isShow: true
     }
+  },
+  methods: {
+    getCardDatas () {
+      axios.get(httpUrl.getCardDatas)
+      .then(res => {
+        this.theme = res.data.getCardDatas.theme
+        this.themeStorage()
+        this.cardName = res.data.getCardDatas.cardName
+        this.cardType = res.data.getCardDatas.cardType
+        this.cardLogoSrc = res.data.getCardDatas.cardLogoSrc
+        this.cardNum = res.data.getCardDatas.cardNum
+        this.score = res.data.getCardDatas.score
+        this.prestore = res.data.getCardDatas.prestore
+        this.isShow = res.data.getCardDatas.isShow
+      })
+      .catch(err => console.log(err))
+    },
+    themeStorage () {
+      if (typeof(Storage) !== "undefined") {
+        localStorage.theme = this.theme;
+      } else {
+        console.log('对不起，您的浏览器不支持 web 存储')
+      }
+    }
+  },
+  created () {
+    this.getCardDatas()
   }
 }
 </script>
@@ -86,7 +126,7 @@ export default {
   width: 325px;
   height: 194px;
   border-radius: 5px;
-  margin: 20px auto;
+  margin: 20px auto 20px;
   box-shadow: 0 0 2px lightgray;
   background: url('../assets/05.png');
   background-size: 300px;

@@ -12,6 +12,9 @@ import VueQriously from 'vue-qriously'
 Vue.use(VueQriously)
 import 'vue-qriously/dist/vue-qriously.js'
 
+// 引入mockjs
+import mock from './mock/mock'
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

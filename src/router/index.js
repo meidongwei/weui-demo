@@ -56,10 +56,12 @@ export default new Router({
     },
     {
       path: '/updateInfo',
+      name: 'updateInfo',
       component: updateInfo
     },
     {
       path: '/updatePwd',
+      name: 'updatePwd',
       component: updatePwd
     }
   ]

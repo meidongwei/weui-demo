@@ -45,8 +45,16 @@
 export default {
   data () {
     return {
-      theme: '#32b16c'
+      theme: ''
     }
+  },
+  methods: {
+    getTheme () {
+      this.theme = localStorage.getItem('theme')
+    }
+  },
+  created () {
+    this.getTheme()
   }
 }
 </script>

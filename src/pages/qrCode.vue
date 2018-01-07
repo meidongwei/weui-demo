@@ -12,22 +12,34 @@
 </template>
 <script>
 import VueBarcode from 'vue-barcode'
+import axios from 'axios'
+import { httpUrl } from '@/http_url'
 export default {
   components: {
     barcode: VueBarcode
   },
   data () {
     return {
-      number: '8000000001000001'
+      number: ''
     }
+  },
+  methods: {
+    getPayNum () {
+      axios.get(httpUrl.getPayNum)
+      .then(res => {
+        this.number = res.data.getPayNum
+      })
+      .catch(err => console.log(err))
+    }
+  },
+  created () {
+    this.getPayNum()
   }
 }
 </script>
 <style scoped>
 .page {
-  height: 100%;
-  background-color: #313131;
-  padding-top: 20px;
+  padding: 20px 0;
   box-sizing: border-box;
 }
 .bg-white {
@@ -36,6 +48,7 @@ export default {
   background-color: #fff;
   border-radius: 3px;
   margin: 0 auto;
+  box-shadow: 0 0 10px lightgray;
   display: flex;
   flex-direction: column;
   align-items: center;
