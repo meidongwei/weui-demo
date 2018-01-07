@@ -7,6 +7,11 @@ import router from './router'
 // 引入 weui 样式
 import 'weui/dist/style/weui.min.css'
 
+// 引入二维码插件
+import VueQriously from 'vue-qriously'
+Vue.use(VueQriously)
+import 'vue-qriously/dist/vue-qriously.js'
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

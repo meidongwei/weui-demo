@@ -1,5 +1,5 @@
 <template>
-  <div class="page">
+  <div>
     <!-- card -->
     <div :style="{'background-color': theme}" class="card">
       <div class="card-header">
@@ -12,7 +12,9 @@
             <p>普通会员</p>
           </div>
         </div>
-        <router-link to="/qrCode" class="card-qrcode-box"></router-link>
+        <router-link to="/qrCode" class="card-qrcode-box">
+          <icon name="qrcode" scale="2" style="color:#fff;"></icon>
+        </router-link>
       </div>
       <div class="card-num-box">
         <p>8000000000000001</p>
@@ -65,7 +67,12 @@
 </template>
 
 <script>
+import 'vue-awesome/icons/qrcode'
+import Icon from 'vue-awesome/components/Icon'
 export default {
+  components: {
+    Icon
+  },
   data () {
     return {
       theme: '#32b16c'
@@ -81,6 +88,9 @@ export default {
   border-radius: 5px;
   margin: 20px auto;
   box-shadow: 0 0 2px lightgray;
+  background: url('../assets/05.png');
+  background-size: 300px;
+  background-repeat: no-repeat;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -117,6 +127,9 @@ export default {
   height: 38px;
   border-radius: 8px;
   border: 1px dashed #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .card-num-box {
   padding: 16px;

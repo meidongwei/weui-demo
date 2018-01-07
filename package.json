@@ -11,6 +11,9 @@
   },
   "dependencies": {
     "vue": "^2.5.2",
+    "vue-awesome": "^2.3.4",
+    "vue-barcode": "^1.1.0",
+    "vue-qriously": "^1.1.1",
     "vue-router": "^3.0.1",
     "weui": "^1.1.2"
   },
