@@ -7,9 +7,20 @@ let httpUrl = {
   'getCardDatas': _host + '/api/getCardDatas',
   // profile page
   'getProfileDatas': _host + '/api/getProfileDatas',
+  'resetPwd': _host + '/api/resetPwd',
   // updatePhone page
   'handleSendCode': _host + '/api/handleSendCode',
   // qrCode page
-  'getPayNum': _host + '/api/getPayNum'
+  'getPayNum': _host + '/api/getPayNum',
+  // consume page
+  'getConsumeDatas': _host + '/api/getConsumeDatas',
+  // updateInfo page
+  'submitInfo': _host + '/api/submitInfo',
+  // updatePwd page
+  'submitPwd': _host + '/api/submitPwd',
+  // recharge page
+  'getRechargeDatas': _host + '/api/getRechargeDatas',
+  // suiStore page
+  'getSuiStoreDatas': _host + '/api/getSuiStoreDatas'
 };
 export { httpUrl }

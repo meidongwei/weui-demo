@@ -3,42 +3,21 @@
     <div class="page__bd" style="margin-top: 20px;">
         <div class="weui-panel weui-panel_access">
             <div class="weui-panel__bd">
-                <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg sui-store">
+
+                <a v-for="(item, index) in suiStoreList" :key="index" href="javascript:;"
+                  class="weui-media-box weui-media-box_appmsg sui-store">
                     <div class="weui-media-box__bd media-left">
                         <div class="media-left-header">
-                          <h4 class="weui-media-box__title">北京房山中粮万科店</h4>
-                          <span>240.90公里</span>
+                          <h4 class="weui-media-box__title">{{ item.suiName }}</h4>
+                          <span>{{ item.suiDistance }}公里</span>
                         </div>
-                        <p class="weui-media-box__desc">由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。</p>
+                        <p class="weui-media-box__desc">{{ item.suiAddress }}</p>
                     </div>
                     <div class="weui-media-box__hd">
                         <icon name="map-marker" scale="2"></icon>
                     </div>
                 </a>
-                <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg sui-store">
-                    <div class="weui-media-box__bd media-left">
-                        <div class="media-left-header">
-                          <h4 class="weui-media-box__title">北京房山中粮万科店</h4>
-                          <span>240.90公里</span>
-                        </div>
-                        <p class="weui-media-box__desc">由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。</p>
-                    </div>
-                    <div class="weui-media-box__hd">
-                        <icon name="map-marker" scale="2"></icon>
-                    </div>
-                </a>
-                <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg sui-store">
-                    <div class="weui-media-box__bd media-left">
-                        <div class="media-left-header">
-                          <h4 class="weui-media-box__title">北京房山中粮万科店</h4>
-                          <span>240.90公里</span>
-                        </div>
-                        <p class="weui-media-box__desc">由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。</p>
-                    </div>
-                    <div class="weui-media-box__hd">
-                        <icon name="map-marker" scale="2"></icon>
-                    </div>
-                </a>
+
             </div>
         </div>
       </div>
@@ -47,11 +26,35 @@
 </template>
 
 <script>
+import axios from 'axios'
+import { httpUrl } from '@/http_url'
 import 'vue-awesome/icons/map-marker'
 import Icon from 'vue-awesome/components/Icon'
 export default {
   components: {
     Icon
+  },
+  data () {
+    return {
+      suiStoreList: [],
+      nowIndex: 1,
+      number: 5
+    }
+  },
+  methods: {
+    getSuiStoreDatas () {
+      axios.get(httpUrl.getSuiStoreDatas,[
+        this.nowIndex,
+        this.number
+      ])
+      .then(res => {
+        this.suiStoreList = res.data.getSuiStoreList
+      })
+      .catch(err => console.log(err))
+    }
+  },
+  created () {
+    this.getSuiStoreDatas()
   }
 }
 </script>

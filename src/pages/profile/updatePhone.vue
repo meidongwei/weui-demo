@@ -7,7 +7,7 @@
           <p>手机</p>
         </div>
         <div class="weui-cell__ft">{{ proPhone }}</div>
-        <a @click="handleSendCode" class="weui-btn weui-btn_mini weui-btn_plain-primary"
+        <a @click="handleSendCode" class="weui-btn weui-btn_mini weui-btn_default"
           style="margin-left: 10px;"
           :style="[{'border': '1px solid' + theme}, {'color': theme}]"
           href="javascript:;">发送验证码</a>
@@ -25,7 +25,7 @@
       </div>
     </div>
     <!-- 按钮 -->
-    <a class="weui-btn weui-btn_plain-primary"
+    <a class="weui-btn weui-btn_default"
       style="width: 320px;"
       :style="[{'border': '1px solid' + theme}, {'color': theme}]"
       href="javascript:;">下一步</a>
@@ -34,16 +34,17 @@
 
       <!--BEGIN toast-->
       <div id="toast" v-if="isShowSuccess">
-          <div class="weui-mask_transparent"></div>
+          <!-- <div class="weui-mask_transparent"></div> -->
           <div class="weui-toast">
               <i class="weui-icon-success-no-circle weui-icon_toast"></i>
               <p class="weui-toast__content">发送成功</p>
           </div>
       </div>
       <div id="toast" v-if="isShowFalse">
-          <div class="weui-mask_transparent"></div>
-          <div class="weui-toast">
-              <i class="weui-icon-success-no-circle weui-icon_toast"></i>
+          <!-- <div class="weui-mask_transparent"></div> -->
+          <div class="weui-toast" style="padding-top: 10px;">
+              <i style="color: #fff;margin-bottom: 5px;"
+                class="weui-icon-info-circle weui-icon_toast"></i>
               <p class="weui-toast__content">发送失败</p>
           </div>
       </div>
@@ -102,5 +103,5 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 </style>

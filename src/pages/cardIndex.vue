@@ -63,7 +63,7 @@
       </router-link>
     </div>
     <!-- 按钮 -->
-    <a class="weui-btn weui-btn_plain-primary"
+    <a class="weui-btn weui-btn_default"
       style="width: 188px;"
       :style="[{'border': '1px solid' + theme}, {'color': theme}]"
       href="javascript:;">进入微信卡包</a>

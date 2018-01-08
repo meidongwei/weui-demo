@@ -49,13 +49,36 @@
         </div>
         <div class="weui-cell__ft"></div>
       </router-link>
-      <a class="weui-cell weui-cell_access" href="javascript:;">
+      <a class="weui-cell weui-cell_access" href="javascript:;"
+        @click="resetPwd">
         <div class="weui-cell__bd">
-          <p>充值会员卡密码</p>
+          <p>重置会员卡密码</p>
         </div>
         <div class="weui-cell__ft"></div>
       </a>
     </div>
+
+
+    <!--BEGIN toast-->
+    <div id="toast" v-if="isShowSuccess">
+        <!-- <div class="weui-mask_transparent"></div> -->
+        <div class="weui-toast">
+            <i class="weui-icon-success-no-circle weui-icon_toast"></i>
+            <p class="weui-toast__content">操作成功</p>
+        </div>
+    </div>
+    <div id="toast" v-if="isShowFalse">
+        <!-- <div class="weui-mask_transparent"></div> -->
+        <div class="weui-toast" style="padding-top: 10px;">
+            <i style="color: #fff;margin-bottom: 5px;"
+              class="weui-icon-info-circle weui-icon_toast"></i>
+            <p class="weui-toast__content">操作失败</p>
+        </div>
+    </div>
+    <!--end toast-->
+
+
+
   </div>
 </template>
 
@@ -68,7 +91,9 @@ export default {
       proPhone: 0,
       proName: '',
       proSex: 0,
-      proBirthday: ''
+      proBirthday: '',
+      isShowSuccess: false,
+      isShowFalse: false
     }
   },
   methods: {
@@ -79,6 +104,23 @@ export default {
         this.proName = res.data.getProfileDatas.proName
         this.proSex = res.data.getProfileDatas.proSex
         this.proBirthday = res.data.getProfileDatas.proBirthday
+      })
+      .catch(err => console.log(err))
+    },
+    resetPwd () {
+      axios.get(httpUrl.resetPwd)
+      .then(res => {
+        if (res.data.status) {
+          this.isShowSuccess = true
+          setTimeout(() => {
+            this.isShowSuccess = false
+          }, 2000)
+        } else {
+          this.isShowFalse = true
+          setTimeout(() => {
+            this.isShowFalse = false
+          }, 2000)
+        }
       })
       .catch(err => console.log(err))
     }
