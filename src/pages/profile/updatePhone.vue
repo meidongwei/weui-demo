@@ -42,8 +42,8 @@
       </div>
       <div id="toast" v-if="isShowFalse">
           <!-- <div class="weui-mask_transparent"></div> -->
-          <div class="weui-toast" style="padding-top: 10px;">
-              <i style="color: #fff;margin-bottom: 5px;"
+          <div class="weui-toast">
+              <i style="color: #fff;margin-bottom: 5px;font-size: 40px;margin-top: 30px;"
                 class="weui-icon-info-circle weui-icon_toast"></i>
               <p class="weui-toast__content">发送失败</p>
           </div>

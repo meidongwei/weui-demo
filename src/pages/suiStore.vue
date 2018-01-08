@@ -3,7 +3,7 @@
     <div class="page__bd" style="margin-top: 20px;">
         <div class="weui-panel weui-panel_access">
             <div class="weui-panel__bd">
-
+                <!-- 循环 -->
                 <a v-for="(item, index) in suiStoreList" :key="index" href="javascript:;"
                   class="weui-media-box weui-media-box_appmsg sui-store">
                     <div class="weui-media-box__bd media-left">
@@ -17,6 +17,14 @@
                         <icon name="map-marker" scale="2"></icon>
                     </div>
                 </a>
+                <!-- end 循环 -->
+                <!-- bubbles  circles  spiral  waveDots -->
+                <infinite-loading spinner="waveDots"
+                  @infinite="infiniteHandler">
+                  <span slot="no-more">
+                    There is no more datas :(
+                  </span>
+                </infinite-loading>
 
             </div>
         </div>
@@ -26,35 +34,43 @@
 </template>
 
 <script>
+import InfiniteLoading from 'vue-infinite-loading'
 import axios from 'axios'
 import { httpUrl } from '@/http_url'
 import 'vue-awesome/icons/map-marker'
 import Icon from 'vue-awesome/components/Icon'
 export default {
   components: {
-    Icon
+    Icon,
+    InfiniteLoading
   },
   data () {
     return {
       suiStoreList: [],
-      nowIndex: 1,
-      number: 5
+      // 每页显示条数
+      number: 10
     }
   },
   methods: {
-    getSuiStoreDatas () {
-      axios.get(httpUrl.getSuiStoreDatas,[
-        this.nowIndex,
-        this.number
-      ])
+    infiniteHandler($state) {
+      axios.post(httpUrl.getSuiStoreDatas, {
+        params: {
+          page: this.suiStoreList.length / this.number + 1,
+        }
+      })
       .then(res => {
-        this.suiStoreList = res.data.getSuiStoreList
+        if (res.data.getSuiStoreList.length) {
+          this.suiStoreList = this.suiStoreList.concat(res.data.getSuiStoreList)
+          $state.loaded()
+          // if (this.suiStoreList.length / 10 === 10) {
+          //   $state.complete()
+          // }
+        } else {
+          $state.complete()
+        }
       })
       .catch(err => console.log(err))
     }
-  },
-  created () {
-    this.getSuiStoreDatas()
   }
 }
 </script>

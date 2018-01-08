@@ -12,13 +12,6 @@ import VueQriously from 'vue-qriously'
 Vue.use(VueQriously)
 import 'vue-qriously/dist/vue-qriously.js'
 
-// 按需引入iview组件
-import { Scroll, Spin, Icon } from 'iview'
-Vue.component('Scroll', Scroll)
-Vue.component('Spin', Spin)
-Vue.component('Icon', Icon)
-import 'iview/dist/styles/iview.css'
-
 // 引入mockjs
 import mock from './mock/mock'
 

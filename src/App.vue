@@ -10,6 +10,5 @@ export default {
 <style>
 html, body {
   background-color: #f8f8f8;
-  font-size: 16px;
 }
 </style>

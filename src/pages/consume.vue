@@ -1,82 +1,67 @@
 <template>
   <div>
-    <Scroll :on-reach-bottom="handleReachBottom" height="580">
-      <div dis-hover v-for="(item, index) in consumeList" :key="index" class="segment"
-        :class="[item.isSuccess ? 'green' : 'red']">
-        <div class="header">
-          <h3 v-if="item.isSuccess">消费金额：{{ item.conMoney }}元</h3>
-          <h3 v-else style="color: #eb6941;">取消消费：{{ item.conMoney }}元</h3>
-          <span>{{ item.conDate }}</span>
-        </div>
-        <div class="address">消费门店：{{ item.conAddress }}</div>
-        <ul class="else">
-          <li>预存支付：{{ item.conPrestore }}元</li>
-          <li>积分支付：{{ item.conScore }}元</li>
-          <li>其他支付：{{ item.conElse }}元</li>
-        </ul>
+    <!-- 循环 -->
+    <div dis-hover v-for="(item, index) in consumeList" :key="index" class="segment"
+      :class="[item.isSuccess ? 'green' : 'red']">
+      <div class="header">
+        <h3 v-if="item.isSuccess">消费金额：{{ item.conMoney }}元</h3>
+        <h3 v-else style="color: #eb6941;">取消消费：{{ item.conMoney }}元</h3>
+        <span>{{ item.conDate }}</span>
       </div>
-    </Scroll>
-    <!--BEGIN toast-->
-    <div id="toast" v-if="isShow">
-        <!-- <div class="weui-mask_transparent"></div> -->
-        <div class="weui-toast" style="padding-top: 10px;">
-            <i style="color: #fff;margin-bottom: 5px;"
-              class="weui-icon-info-circle weui-icon_toast"></i>
-            <p class="weui-toast__content">没有数据了</p>
-        </div>
+      <div class="address">消费门店：{{ item.conAddress }}</div>
+      <ul class="else">
+        <li>预存支付：{{ item.conPrestore }}元</li>
+        <li>积分支付：{{ item.conScore }}元</li>
+        <li>其他支付：{{ item.conElse }}元</li>
+      </ul>
     </div>
-    <!--end toast-->
+    <!-- end 循环 -->
+    <!-- bubbles  circles  spiral  waveDots -->
+    <infinite-loading spinner="waveDots"
+      @infinite="infiniteHandler">
+      <span slot="no-more">
+        There is no more datas :(
+      </span>
+    </infinite-loading>
+
   </div>
 </template>
 
 <script>
+import InfiniteLoading from 'vue-infinite-loading'
 import axios from 'axios'
 import { httpUrl } from '@/http_url'
 export default {
+  components: {
+    InfiniteLoading
+  },
   data () {
     return {
       consumeList: [],
-      // 当前页面
-      nowIndex: 1,
       // 每页显示条数
-      number: 5,
-      isShow: false
+      number: 5
     }
   },
   methods: {
-    getConsumeDatas () {
-      axios.post(httpUrl.getConsumeDatas,[
-        this.nowIndex,
-        this.number
-      ])
+    infiniteHandler($state) {
+      axios.post(httpUrl.getConsumeDatas, {
+        params: {
+          page: this.consumeList.length / this.number + 1,
+        }
+      })
       .then(res => {
-        if (this.consumeList == '') {
-          this.consumeList = res.data.getConsumeList
+        if (res.data.getConsumeList.length) {
+          this.consumeList = this.consumeList.concat(res.data.getConsumeList)
+          $state.loaded()
+          // if (this.suiStoreList.length / 10 === 10) {
+          //   $state.complete()
+          // }
         } else {
-          if (res.data.getConsumeList == '') {
-            this.consumeList = this.consumeList.concat(res.data.getConsumeList)
-            this.nowIndex = this.nowIndex + 1
-          } else {
-            this.isShow = true
-            setTimeout(() => {
-              this.isShow = false
-            }, 2000)
-          }
+          $state.complete()
         }
       })
       .catch(err => console.log(err))
-    },
-    handleReachBottom () {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          this.getConsumeDatas()
-          resolve();
-        }, 2000);
-      })
     }
-  },
-  created () {
-    this.getConsumeDatas()
   }
 }
 </script>
