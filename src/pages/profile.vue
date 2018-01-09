@@ -104,6 +104,9 @@ export default {
         this.proName = res.data.getProfileDatas.proName
         this.proSex = res.data.getProfileDatas.proSex
         this.proBirthday = res.data.getProfileDatas.proBirthday
+        var dateArr = this.proBirthday.split('-')
+        this.proBirthday = dateArr[0]+'年'+dateArr[1].replace(/^0/,'')
+          +'月'+dateArr[2].replace(/^0/,'')+'日'
       })
       .catch(err => console.log(err))
     },

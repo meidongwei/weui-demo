@@ -48,6 +48,9 @@ Mock.mock(/submitInfo/, {
 Mock.mock(/submitPwd/, {
   'status': '@boolean'
 })
+Mock.mock(/checkOldPwd/, {
+  'status': '@boolean'
+})
 Mock.mock(/resetPwd/, {
   'status': '@boolean'
 })

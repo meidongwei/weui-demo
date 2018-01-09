@@ -10,7 +10,7 @@
           <input class="weui-input" type="text"
             style="text-align:right;"
             placeholder="请输入姓名"
-            :value="proName"/>
+            v-model="proName"/>
         </div>
       </div>
       <div class="weui-cell">
@@ -19,8 +19,7 @@
         </div>
         <div class="weui-cell__bd" style="display:flex;justify-content:flex-end;">
           <div style="margin-right: 15px;">
-            <input v-model="proSex" value="1" id="boy" type="radio"
-              style=""/>
+            <input v-model="proSex" value="1" id="boy" type="radio"/>
             <label for="boy">男</label>
           </div>
           <div>
@@ -36,8 +35,8 @@
         <div class="weui-cell__bd">
           <input class="weui-input" type="text"
             style="text-align:right;"
-            placeholder="请输入验证码"
-            :value="proBirthday"/>
+            v-model="proBirthday"
+            @click="showPicker"/>
         </div>
       </div>
     </div>
@@ -75,6 +74,10 @@
 <script>
 import axios from 'axios'
 import { httpUrl } from '@/http_url'
+// 引入 weui.js 目前用于 picker
+import 'weui'
+import weui from 'weui.js'
+// weui.alert('alert')
 export default {
   data () {
     return {
@@ -87,6 +90,30 @@ export default {
     }
   },
   methods: {
+    showPicker () {
+      const _this = this
+      // 使用 split() 方法去掉字符串中的“年月日”
+      // 年：a[0]  月：b[0]  日：c[0]
+      var a = _this.proBirthday.split('年')
+      var b = a[1].split('月')
+      var c = b[1].split('日')
+
+      weui.datePicker({
+        start: 1989,
+        end: new Date().getFullYear(),
+        defaultValue: [a[0], b[0], c[0]],
+        // onChange (result) {
+        //   console.log(result)
+        // },
+        onConfirm (result) {
+          const arr = new Array()
+          result.forEach(item => {
+            arr.push(item.label)
+          })
+          _this.proBirthday = arr.join('')
+        }
+      })
+    },
     getTheme () {
       this.theme = localStorage.getItem('theme')
     },

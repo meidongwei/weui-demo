@@ -10,6 +10,7 @@ let httpUrl = {
   'resetPwd': _host + '/api/resetPwd',
   // updatePhone page
   'handleSendCode': _host + '/api/handleSendCode',
+  'checkOldPwd': _host + '/api/checkOldPwd',
   // qrCode page
   'getPayNum': _host + '/api/getPayNum',
   // consume page

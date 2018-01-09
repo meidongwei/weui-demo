@@ -9,7 +9,8 @@
         <div class="weui-cell__bd">
           <input class="weui-input" type="text"
             style="text-align:right;"
-            placeholder="请输入旧密码"/>
+            placeholder="请输入旧密码"
+            v-model="oldPwd"/>
         </div>
       </div>
       <div class="weui-cell weui-cell_access">
@@ -19,7 +20,8 @@
         <div class="weui-cell__bd">
           <input class="weui-input" type="text"
             style="text-align:right;"
-            placeholder="请输入新密码"/>
+            placeholder="请输入新密码"
+            v-model="newPwd"/>
         </div>
       </div>
       <div class="weui-cell weui-cell_access">
@@ -33,6 +35,12 @@
             v-model="password"/>
         </div>
       </div>
+    </div>
+    <!-- 验证提示信息 -->
+    <div class="checkMsg">
+      <span v-if="isShowOld" style="color: red;">旧密码输入错误</span>
+      <span v-if="isShowNew" style="color: red;">两次密码输入不一致</span>
+      <span v-if="isShowNull" style="color: red;">密码不能为空</span>
     </div>
     <!-- 按钮 -->
     <a class="weui-btn weui-btn_default"
@@ -73,7 +81,12 @@ export default {
       theme: '',
       password: '',
       isShowSuccess: false,
-      isShowFalse: false
+      isShowFalse: false,
+      isShowOld: false,
+      isShowNew: false,
+      isShowNull: false,
+      oldPwd: '',
+      newPwd: ''
     }
   },
   methods: {
@@ -81,21 +94,53 @@ export default {
       this.theme = localStorage.getItem('theme')
     },
     submitPwd () {
-      axios.post(httpUrl.submitPwd, this.password)
-      .then(res => {
-        if (res.data.status) {
-          this.isShowSuccess = true
-          setTimeout(() => {
-            this.isShowSuccess = false
-          }, 2000)
-        } else {
-          this.isShowFalse = true
-          setTimeout(() => {
-            this.isShowFalse = false
-          }, 2000)
+      this.isShowNew = false
+      this.isShowOld = false
+      if (this.oldPwd !== '' && this.newPwd !== '' && this.password !== '') {
+        this.isShowNull = false
+        if (this.checkNewPwd()) {
+          // console.log('进入提交方法')
+          axios.post(httpUrl.submitPwd, this.password)
+          .then(res => {
+            if (res.data.status) {
+              this.isShowSuccess = true
+              setTimeout(() => {
+                this.isShowSuccess = false
+              }, 2000)
+            } else {
+              this.isShowFalse = true
+              setTimeout(() => {
+                this.isShowFalse = false
+              }, 2000)
+            }
+          })
+          .catch(err => console.log(err))
         }
-      })
-      .catch(err => console.log(err))
+      } else {
+        this.isShowNull = true
+      }
+    },
+    // checkOldPwd () {
+    //   return axios.post(httpUrl.checkOldPwd, this.oldPwd)
+    //   .then(res => {
+    //     if (res.data.status) {
+    //       this.isShowOld = false
+    //       return true
+    //     } else {
+    //       this.isShowOld = true
+    //       return false
+    //     }
+    //   })
+    //   .catch(err => console.log(err))
+    // },
+    checkNewPwd () {
+      if (this.newPwd === this.password) {
+        this.isShowNew = false
+        return true
+      } else {
+        this.isShowNew = true
+        return false
+      }
     }
   },
   created () {
@@ -104,5 +149,9 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.checkMsg {
+  text-align: center;
+  margin-bottom: 20px;
+}
 </style>
