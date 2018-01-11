@@ -89,19 +89,26 @@ export default {
       isShowFalse: false
     }
   },
+  computed: {
+    year () {
+      return this.proBirthday.split('年')
+    },
+    month () {
+      return this.year[1].split('月')
+    },
+    day () {
+      return this.month[1].split('日')
+    }
+  },
   methods: {
     showPicker () {
       const _this = this
       // 使用 split() 方法去掉字符串中的“年月日”
       // 年：a[0]  月：b[0]  日：c[0]
-      var a = _this.proBirthday.split('年')
-      var b = a[1].split('月')
-      var c = b[1].split('日')
-
       weui.datePicker({
-        start: 1989,
+        start: 1960,
         end: new Date().getFullYear(),
-        defaultValue: [a[0], b[0], c[0]],
+        defaultValue: [this.year[0], this.month[0], this.day[0]],
         // onChange (result) {
         //   console.log(result)
         // },
