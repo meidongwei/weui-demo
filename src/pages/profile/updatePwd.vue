@@ -7,10 +7,11 @@
           <p>旧密码</p>
         </div>
         <div class="weui-cell__bd">
-          <input class="weui-input" type="text"
+          <input class="weui-input" type="password"
             style="text-align:right;"
             placeholder="请输入旧密码"
-            v-model="oldPwd"/>
+            v-model="oldPwd"
+            @blur="checkOldPwd"/>
         </div>
       </div>
       <div class="weui-cell weui-cell_access">
@@ -18,7 +19,7 @@
           <p>新密码</p>
         </div>
         <div class="weui-cell__bd">
-          <input class="weui-input" type="text"
+          <input class="weui-input" type="password"
             style="text-align:right;"
             placeholder="请输入新密码"
             v-model="newPwd"/>
@@ -29,19 +30,14 @@
           <p>确认新密码</p>
         </div>
         <div class="weui-cell__bd">
-          <input class="weui-input" type="text"
+          <input class="weui-input" type="password"
             style="text-align:right;"
             placeholder="请再次输入你的新密码"
             v-model="password"/>
         </div>
       </div>
     </div>
-    <!-- 验证提示信息 -->
-    <div class="checkMsg">
-      <span v-if="isShowOld" style="color: red;">旧密码输入错误</span>
-      <span v-if="isShowNew" style="color: red;">两次密码输入不一致</span>
-      <span v-if="isShowNull" style="color: red;">密码不能为空</span>
-    </div>
+
     <!-- 按钮 -->
     <a class="weui-btn weui-btn_default"
       style="width: 320px;"
@@ -50,19 +46,43 @@
 
 
       <!--BEGIN toast-->
+      <div id="toast" v-if="isShowNull">
+          <!-- <div class="weui-mask_transparent"></div> -->
+          <div class="weui-toast">
+            <i style="color: #fff;margin-bottom: 5px;font-size: 40px;margin-top: 30px;"
+              class="weui-icon-info-circle weui-icon_toast"></i>
+            <p class="weui-toast__content">密码不能为空</p>
+          </div>
+      </div>
+      <div id="toast" v-if="isShowCheckOldPwd">
+          <!-- <div class="weui-mask_transparent"></div> -->
+          <div class="weui-toast">
+            <i style="color: #fff;margin-bottom: 5px;font-size: 40px;margin-top: 30px;"
+              class="weui-icon-info-circle weui-icon_toast"></i>
+            <p class="weui-toast__content">旧密码不正确</p>
+          </div>
+      </div>
+      <div id="toast" v-if="isShowCheckNewPwd">
+          <!-- <div class="weui-mask_transparent"></div> -->
+          <div class="weui-toast">
+            <i style="color: #fff;margin-bottom: 5px;font-size: 40px;margin-top: 30px;"
+              class="weui-icon-info-circle weui-icon_toast"></i>
+            <p class="weui-toast__content">两次密码不一致</p>
+          </div>
+      </div>
       <div id="toast" v-if="isShowSuccess">
           <!-- <div class="weui-mask_transparent"></div> -->
           <div class="weui-toast">
-              <i class="weui-icon-success-no-circle weui-icon_toast"></i>
-              <p class="weui-toast__content">保存成功</p>
+            <i class="weui-icon-success-no-circle weui-icon_toast"></i>
+            <p class="weui-toast__content">保存成功</p>
           </div>
       </div>
       <div id="toast" v-if="isShowFalse">
           <!-- <div class="weui-mask_transparent"></div> -->
           <div class="weui-toast">
-              <i style="color: #fff;margin-bottom: 5px;font-size: 40px;margin-top: 30px;"
+            <i style="color: #fff;margin-bottom: 5px;font-size: 40px;margin-top: 30px;"
                 class="weui-icon-info-circle weui-icon_toast"></i>
-              <p class="weui-toast__content">保存失败</p>
+            <p class="weui-toast__content">保存失败</p>
           </div>
       </div>
       <!--end toast-->
@@ -79,14 +99,19 @@ export default {
   data () {
     return {
       theme: '',
+      // 要发送的密码（确认新密码字段）
       password: '',
+      // 各种提示窗口
       isShowSuccess: false,
       isShowFalse: false,
-      isShowOld: false,
-      isShowNew: false,
       isShowNull: false,
+      isShowCheckOldPwd: false,
+      isShowCheckNewPwd: false,
+      // 验证两次新密码需要的字段
       oldPwd: '',
-      newPwd: ''
+      newPwd: '',
+      // 验证旧密码返回的状态
+      status: false
     }
   },
   methods: {
@@ -94,45 +119,70 @@ export default {
       this.theme = localStorage.getItem('theme')
     },
     submitPwd () {
-      this.isShowNew = false
-      this.isShowOld = false
+      // 验证旧密码、新密码、确认新密码是否为空
       if (this.oldPwd !== '' && this.newPwd !== '' && this.password !== '') {
-        this.isShowNull = false
-        if (this.checkNewPwd()) {
-          // console.log('进入提交方法')
-          axios.post(httpUrl.submitPwd, this.password)
-          .then(res => {
-            if (res.data.status) {
-              this.isShowSuccess = true
-              setTimeout(() => {
-                this.isShowSuccess = false
-              }, 2000)
-            } else {
-              this.isShowFalse = true
-              setTimeout(() => {
-                this.isShowFalse = false
-              }, 2000)
-            }
-          })
-          .catch(err => console.log(err))
+        // 验证旧密码是否正确
+        if (this.status) {
+          // 验证两次密码是否一致
+          if (this.checkNewPwd()) {
+            // 所有验证通过，发送 password 到服务器
+            let _this = this
+            axios.post(httpUrl.submitPwd, this.password)
+            .then(res => {
+              if (res.data.status) {
+                // 服务器保存成功
+                _this.isShowSuccess = true
+                setTimeout(() => {
+                  _this.isShowSuccess = false
+                }, 2000)
+              } else {
+                // 服务器保存失败
+                _this.isShowFalse = true
+                setTimeout(() => {
+                  _this.isShowFalse = false
+                }, 2000)
+              }
+              if (res.data.status) {
+                this.isShowSuccess = true
+                setTimeout(() => {
+                  this.isShowSuccess = false
+                }, 2000)
+              } else {
+                this.isShowFalse = true
+                setTimeout(() => {
+                  this.isShowFalse = false
+                }, 2000)
+              }
+            })
+            .catch(err => console.log(err))
+          } else {
+            this.isShowCheckNewPwd = true
+            setTimeout(() => {
+              this.isShowCheckNewPwd = false
+            }, 2000)
+          }
+        } else {
+          this.isShowCheckOldPwd = true
+          setTimeout(() => {
+            this.isShowCheckOldPwd = false
+          }, 2000)
         }
       } else {
         this.isShowNull = true
+        setTimeout(() => {
+          this.isShowNull = false
+        }, 2000)
       }
     },
-    // checkOldPwd () {
-    //   return axios.post(httpUrl.checkOldPwd, this.oldPwd)
-    //   .then(res => {
-    //     if (res.data.status) {
-    //       this.isShowOld = false
-    //       return true
-    //     } else {
-    //       this.isShowOld = true
-    //       return false
-    //     }
-    //   })
-    //   .catch(err => console.log(err))
-    // },
+    // 旧密码失焦事件，把返回的状态放在 status 里
+    checkOldPwd () {
+      axios.post(httpUrl.checkOldPwd, this.oldPwd)
+      .then(res => {
+        this.status = res.data.status
+      })
+      .catch(err => console.log(err))
+    },
+    // 验证两次密码是否一致的事件
     checkNewPwd () {
       if (this.newPwd === this.password) {
         this.isShowNew = false

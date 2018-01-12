@@ -41,6 +41,8 @@ export default {
 .page {
   padding: 20px 0;
   box-sizing: border-box;
+  height: 100vh;
+  background-color: #000;
 }
 .bg-white {
   width: 320px;
@@ -48,7 +50,7 @@ export default {
   background-color: #fff;
   border-radius: 3px;
   margin: 0 auto;
-  box-shadow: 0 0 10px lightgray;
+  /* box-shadow: 0 0 10px lightgray; */
   display: flex;
   flex-direction: column;
   align-items: center;
