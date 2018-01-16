@@ -3,31 +3,35 @@ import Mock from 'mockjs'
 function getLogoImg () {
 	return Mock.Random.image('100x100', Mock.Random.hex())
 }
-Mock.mock(/getCardDatas/, {
+Mock.mock(/getWxUserinfo/, {
   'getCardDatas': {
     'theme|1': ['#32b16c','#327cb1','#313131'],
-    'cardName|1': ['渝乡辣婆婆','老酒川菜坊','河北人家'],
-    'cardType|1': [1,2,3],
-    'cardLogoSrc': getLogoImg(),
-    'cardNum': '@integer(1000000000000000, 9999999999999999)',
-    'score': '@integer(1000, 2000)',
-    'prestore': '@integer(500, 999).00',
-    'isShow': '@boolean'
+		'cardface': getLogoImg(),
+    'membername|1': ['孙悟空','猪八戒','白龙马'],
+    'mgname|1': ['普通会员','高级会员','铂金会员'],
+    'logo': getLogoImg(),
+    'memberno': '@integer(1000000000000000, 9999999999999999)',
+    'integral': '@integer(1000, 2000)',
+    'balance': '@integer(2000, 5000)',
+		'memberid': '@integer(1, 5000)',
+		'mobile': '1850311@integer(1000,9999)',
+		'sex|1': [1,2],
+		'birthday': '@date("yyyy-MM-dd")'
   }
 })
-Mock.mock(/getProfileDatas/, {
-  'getProfileDatas': {
-    'proPhone': '1850311@integer(1000,9999)',
-    'proName': '李小@ctitle(1,1)',
-    'proSex|1': [1,2],
-    'proBirthday': '@date("yyyy-MM-dd")'
-  }
-})
+// Mock.mock(/getProfileDatas/, {
+//   'getProfileDatas': {
+//     'proPhone': '1850311@integer(1000,9999)',
+//     'proName': '李小@ctitle(1,1)',
+//     'proSex|1': [1,2],
+//     'proBirthday': '@date("yyyy-MM-dd")'
+//   }
+// })
 Mock.mock(/handleSendCode/, {
-  'status': '@boolean'
+  'errcode|1': [0,-1]
 })
-Mock.mock(/getPayNum/, {
-  'getPayNum': '8000@integer(100000000000, 999999999999)'
+Mock.mock(/getPayCode/, {
+  'payno': '8000@integer(100000000000, 999999999999)'
 })
 Mock.mock(/getConsumeDatas/, {
   'getConsumeList|10': [
@@ -43,16 +47,16 @@ Mock.mock(/getConsumeDatas/, {
 	]
 })
 Mock.mock(/submitInfo/, {
-  'status': '@boolean'
+  'errcode|1': [0,-1]
 })
 Mock.mock(/submitPwd/, {
-  'status': '@boolean'
+  'errcode|1': [0,-1]
 })
 Mock.mock(/checkOldPwd/, {
-  'status': '@boolean'
+  'errcode|1': [0,-1]
 })
 Mock.mock(/resetPwd/, {
-  'status': '@boolean'
+  'errcode|1': [0,-1]
 })
 Mock.mock(/getRechargeDatas/, {
   'getRechargeList|4': [

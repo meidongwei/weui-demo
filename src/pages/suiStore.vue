@@ -36,7 +36,7 @@
 <script>
 import InfiniteLoading from 'vue-infinite-loading'
 import axios from 'axios'
-import { httpUrl } from '@/http_url'
+import httpUrl from '@/http_url'
 import 'vue-awesome/icons/map-marker'
 import Icon from 'vue-awesome/components/Icon'
 export default {

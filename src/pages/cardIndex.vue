@@ -1,17 +1,15 @@
 <template>
   <div>
     <!-- card -->
-    <div :style="{'background-color': theme}" class="card">
+    <div :style="[{backgroundImage: 'url(' + imgUrl + ')' }, {'background-color': theme}]" class="card">
       <div class="card-header">
         <div class="card-logo-box">
           <div class="card-logo">
             <img :src="cardLogoSrc" alt="logo">
           </div>
           <div class="card-words">
-            <h3>{{ cardName }}</h3>
-            <p v-if="cardType === 1">普通会员</p>
-            <p v-if="cardType === 2">高级会员</p>
-            <p v-if="cardType === 3">铂金会员</p>
+            <h3>{{ memberName }}</h3>
+            <p>{{ cardType }}</p>
           </div>
         </div>
         <router-link to="/qrCode" class="card-qrcode-box">
@@ -40,7 +38,7 @@
           <p>个人资料</p>
         </div>
         <div class="weui-cell__ft">
-          <span v-if="isShow">完善信息</span>
+          <span>完善信息</span>
         </div>
       </router-link>
       <router-link to="/consume" class="weui-cell weui-cell_access">
@@ -74,42 +72,56 @@
 import 'vue-awesome/icons/qrcode'
 import Icon from 'vue-awesome/components/Icon'
 import axios from 'axios'
-import { httpUrl } from '@/http_url'
+import httpUrl from '@/http_url'
 export default {
   components: {
     Icon
   },
   data () {
     return {
-      theme: '',
-      cardName: '',
-      cardType: 0,
+      theme: '#32b16c',
+      imgUrl: '',
+      memberName: '',
+      cardType: '',
       cardLogoSrc: '',
-      cardNum: 0,
+      cardNum: '',
       score: 0,
       prestore: 0,
-      isShow: true
+      memberid: 0,
+      mobile: '',
+      sex: 0,
+      birthday: ''
     }
   },
   methods: {
     getCardDatas () {
       axios.get(httpUrl.getCardDatas)
       .then(res => {
-        this.theme = res.data.getCardDatas.theme
-        this.themeStorage()
-        this.cardName = res.data.getCardDatas.cardName
-        this.cardType = res.data.getCardDatas.cardType
-        this.cardLogoSrc = res.data.getCardDatas.cardLogoSrc
-        this.cardNum = res.data.getCardDatas.cardNum
-        this.score = res.data.getCardDatas.score
-        this.prestore = res.data.getCardDatas.prestore
-        this.isShow = res.data.getCardDatas.isShow
+        // this.theme = res.data.getCardDatas.theme
+        this.imgUrl = res.data.getCardDatas.cardface
+        this.memberName = res.data.getCardDatas.membername
+        this.cardType = res.data.getCardDatas.mgname
+        this.cardLogoSrc = res.data.getCardDatas.logo
+        this.cardNum = res.data.getCardDatas.memberno
+        this.score = res.data.getCardDatas.integral
+        this.prestore = res.data.getCardDatas.balance/100
+        this.memberid = res.data.getCardDatas.memberid
+        this.mobile = res.data.getCardDatas.mobile
+        this.sex = res.data.getCardDatas.sex
+        this.birthday = res.data.getCardDatas.birthday
+        this.handleStorage()
       })
       .catch(err => console.log(err))
     },
-    themeStorage () {
+    handleStorage () {
       if (typeof(Storage) !== "undefined") {
         localStorage.theme = this.theme;
+        localStorage.memberName = this.memberName
+        localStorage.memberid = this.memberid
+        localStorage.mobile = this.mobile
+        localStorage.sex = this.sex
+        localStorage.birthday = this.birthday
+        // console.log(localStorage)
       } else {
         console.log('对不起，您的浏览器不支持 web 存储')
       }
@@ -128,12 +140,13 @@ export default {
   border-radius: 5px;
   margin: 20px auto 20px;
   box-shadow: 0 0 2px lightgray;
-  background: url('../assets/05.png');
-  background-size: 300px;
+  /* background: url('../assets/05.png'); */
+  background-size: 325px;
   background-repeat: no-repeat;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  /* background-color: rgb(3, 165, 173); */
 }
 .card-header {
   padding: 16px;

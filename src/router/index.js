@@ -6,6 +6,7 @@ import consume from '@/pages/consume'
 import recharge from '@/pages/recharge'
 import suiStore from '@/pages/suiStore'
 import updatePhone from '@/pages/profile/updatePhone'
+import updatePhone2 from '@/pages/profile/updatePhone2'
 import updateInfo from '@/pages/profile/updateInfo'
 import updatePwd from '@/pages/profile/updatePwd'
 import qrCode from '@/pages/qrCode'
@@ -53,6 +54,11 @@ export default new Router({
       path: '/updatePhone',
       name: 'updatePhone',
       component: updatePhone
+    },
+    {
+      path: '/updatePhone2',
+      name: 'updatePhone2',
+      component: updatePhone2
     },
     {
       path: '/updateInfo',

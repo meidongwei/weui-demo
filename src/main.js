@@ -1,5 +1,3 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
 import router from './router'
@@ -12,12 +10,11 @@ import VueQriously from 'vue-qriously'
 Vue.use(VueQriously)
 import 'vue-qriously/dist/vue-qriously.js'
 
-// 引入mockjs
+// 引入 mockjs 只在开发环境中使用，生产环境中可以注释掉
 import mock from './mock/mock'
 
 Vue.config.productionTip = false
 
-/* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,

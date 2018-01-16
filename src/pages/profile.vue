@@ -1,43 +1,48 @@
 <template>
   <div>
     <!-- 带说明、跳转的列表项 -->
-    <div class="weui-cells" style="margin-bottom: 20px;">
-      <router-link :to="{name: 'updatePhone', query: {proPhone: this.proPhone}}" class="weui-cell weui-cell_access">
+    <div v-if="mobile!=='undefined'" class="weui-cells" style="margin-bottom: 20px;">
+      <router-link :to="{name: 'updatePhone'}" class="weui-cell weui-cell_access">
         <div class="weui-cell__bd">
           <p>手机</p>
         </div>
-        <div class="weui-cell__ft">{{ proPhone }}</div>
+        <div class="weui-cell__ft">{{ mobile }}</div>
+      </router-link>
+    </div>
+    <div v-else class="weui-cells" style="margin-bottom: 20px;">
+      <router-link :to="{name: 'updatePhone2'}" class="weui-cell weui-cell_access">
+        <div class="weui-cell__bd">
+          <p>手机</p>
+        </div>
+        <div class="weui-cell__ft">请绑定手机号</div>
       </router-link>
     </div>
     <!-- 带说明、跳转的列表项 -->
     <div class="weui-cells" style="margin-bottom: 20px;">
-      <router-link :to="{name: 'updateInfo',
-        query: {proName: this.proName,proSex: this.proSex,proBirthday: this.proBirthday}}"
+      <router-link :to="{name: 'updateInfo'}"
         class="weui-cell weui-cell_access">
         <div class="weui-cell__bd">
           <p>姓名</p>
         </div>
-        <div class="weui-cell__ft">{{ proName }}</div>
+        <div class="weui-cell__ft">{{ memberName }}</div>
       </router-link>
-      <router-link :to="{name: 'updateInfo',
-        query: {proName: this.proName,proSex: this.proSex,proBirthday: this.proBirthday}}"
+      <router-link :to="{name: 'updateInfo'}"
         class="weui-cell weui-cell_access">
         <div class="weui-cell__bd">
           <p>性别</p>
         </div>
         <div class="weui-cell__ft">
-          <p v-if="proSex === 1">男</p>
+          <p v-if="sex == 1">男</p>
           <p v-else>女</p>
         </div>
       </router-link>
-      <router-link :to="{name: 'updateInfo',
-        query: {proName: this.proName,proSex: this.proSex,proBirthday: this.proBirthday}}"
+      <router-link :to="{name: 'updateInfo'}"
         class="weui-cell weui-cell_access">
         <div class="weui-cell__bd">
           <p>生日</p>
         </div>
         <div class="weui-cell__ft">
-          <p>{{ proBirthday }}</p>
+          <p>{{ birthday }}</p>
         </div>
       </router-link>
     </div>
@@ -84,36 +89,32 @@
 
 <script>
 import axios from 'axios'
-import { httpUrl } from '@/http_url.js'
+import httpUrl from '@/http_url.js'
 export default {
   data () {
     return {
-      proPhone: 0,
-      proName: '',
-      proSex: 0,
-      proBirthday: '',
+      mobile: 0,
+      memberName: '',
+      sex: 0,
+      birthday: '',
       isShowSuccess: false,
       isShowFalse: false
     }
   },
   methods: {
     getProfileDatas () {
-      axios.get(httpUrl.getProfileDatas)
-      .then(res => {
-        this.proPhone = res.data.getProfileDatas.proPhone
-        this.proName = res.data.getProfileDatas.proName
-        this.proSex = res.data.getProfileDatas.proSex
-        this.proBirthday = res.data.getProfileDatas.proBirthday
-        var dateArr = this.proBirthday.split('-')
-        this.proBirthday = dateArr[0]+'年'+dateArr[1].replace(/^0/,'')
-          +'月'+dateArr[2].replace(/^0/,'')+'日'
-      })
-      .catch(err => console.log(err))
+      this.mobile = localStorage.getItem('mobile')
+      this.memberName = localStorage.getItem('memberName')
+      this.sex = localStorage.getItem('sex')
+      this.birthday = localStorage.getItem('birthday')
+      var dateArr = this.birthday.split('-')
+      this.birthday = dateArr[0]+'年'+dateArr[1].replace(/^0/,'')
+        +'月'+dateArr[2].replace(/^0/,'')+'日'
     },
     resetPwd () {
       axios.get(httpUrl.resetPwd)
       .then(res => {
-        if (res.data.status) {
+        if (res.data.errcode === 0) {
           this.isShowSuccess = true
           setTimeout(() => {
             this.isShowSuccess = false

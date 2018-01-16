@@ -9,8 +9,8 @@
         <div class="weui-cell__bd">
           <input class="weui-input" type="text"
             style="text-align:right;"
-            placeholder="请输入姓名"
-            v-model="proName"/>
+            v-model="memberName"
+            >
         </div>
       </div>
       <div class="weui-cell">
@@ -19,11 +19,11 @@
         </div>
         <div class="weui-cell__bd" style="display:flex;justify-content:flex-end;">
           <div style="margin-right: 15px;">
-            <input v-model="proSex" value="1" id="boy" type="radio"/>
+            <input v-model="sex" value="1" id="boy" type="radio"/>
             <label for="boy">男</label>
           </div>
           <div>
-            <input v-model="proSex" value="2" id="girl" type="radio"/>
+            <input v-model="sex" value="2" id="girl" type="radio"/>
             <label for="girl">女</label>
           </div>
         </div>
@@ -35,7 +35,7 @@
         <div class="weui-cell__bd">
           <input class="weui-input" type="text"
             style="text-align:right;"
-            v-model="proBirthday"
+            v-model="birthday"
             @click="showPicker"/>
         </div>
       </div>
@@ -73,7 +73,7 @@
 
 <script>
 import axios from 'axios'
-import { httpUrl } from '@/http_url'
+import httpUrl from '@/http_url'
 // 引入 weui.js 目前用于 picker
 import 'weui'
 import weui from 'weui.js'
@@ -82,16 +82,16 @@ export default {
   data () {
     return {
       theme: '',
-      proName: '',
-      proSex: 0,
-      proBirthday: '',
+      memberName: '',
+      sex: 0,
+      birthday: '',
       isShowSuccess: false,
       isShowFalse: false
     }
   },
   computed: {
     year () {
-      return this.proBirthday.split('年')
+      return this.birthday.split('年')
     },
     month () {
       return this.year[1].split('月')
@@ -117,25 +117,39 @@ export default {
           result.forEach(item => {
             arr.push(item.label)
           })
-          _this.proBirthday = arr.join('')
-        }
+          _this.birthday = arr.join('')
+        },
+        id: 'datePicker'
       })
     },
-    getTheme () {
+    getDatas () {
       this.theme = localStorage.getItem('theme')
+      this.memberName = localStorage.getItem('memberName')
+      this.sex = localStorage.getItem('sex')
+      this.birthday = localStorage.getItem('birthday')
+      var dateArr = this.birthday.split('-')
+      this.birthday = dateArr[0]+'年'+dateArr[1].replace(/^0/,'')
+        +'月'+dateArr[2].replace(/^0/,'')+'日'
     },
     submitInfo () {
       axios.post(httpUrl.submitInfo,[
-        this.proName,
-        this.proSex,
-        this.proBirthday
+        this.memberName,
+        this.sex,
+        this.birthday
       ])
       .then(res => {
-        if (res.data.status) {
+        if (res.data.errcode === 0) {
           this.isShowSuccess = true
           setTimeout(() => {
             this.isShowSuccess = false
           }, 2000)
+          localStorage.memberName = this.memberName
+          localStorage.sex = this.sex
+          // 把 xx年xx月xx日 的日期转化成 xx-xx-xx 格式，并存入localStorage
+          let arr = []
+          arr.push(this.year[0], this.month[0], this.day[0])
+          let date = arr.join('-')
+          localStorage.birthday = date
         } else {
           this.isShowFalse = true
           setTimeout(() => {
@@ -147,10 +161,10 @@ export default {
     }
   },
   created () {
-    this.getTheme()
-    this.proName = this.$route.query.proName
-    this.proSex = this.$route.query.proSex
-    this.proBirthday = this.$route.query.proBirthday
+    this.getDatas()
+    // this.proName = this.$route.query.proName
+    // this.proSex = this.$route.query.proSex
+    // this.proBirthday = this.$route.query.proBirthday
   }
 }
 </script>

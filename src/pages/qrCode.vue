@@ -13,7 +13,7 @@
 <script>
 import VueBarcode from 'vue-barcode'
 import axios from 'axios'
-import { httpUrl } from '@/http_url'
+import httpUrl from '@/http_url'
 export default {
   components: {
     barcode: VueBarcode
@@ -27,7 +27,7 @@ export default {
     getPayNum () {
       axios.get(httpUrl.getPayNum)
       .then(res => {
-        this.number = res.data.getPayNum
+        this.number = res.data.payno
       })
       .catch(err => console.log(err))
     }

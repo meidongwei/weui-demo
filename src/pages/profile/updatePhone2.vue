@@ -6,7 +6,9 @@
         <div class="weui-cell__bd">
           <p>手机</p>
         </div>
-        <div class="weui-cell__ft">{{ mobile }}</div>
+        <input class="weui-input" type="text"
+          v-model="mobile" placeholder="请输入新手机号"
+          style="width: 170px; text-align:right;">
         <a @click="handleSendCode" class="weui-btn weui-btn_mini weui-btn_default"
           style="margin-left: 10px;padding-left: 6px; padding-right: 6px;"
           :style="[{'border': '1px solid' + theme}, {'color': theme}]"
@@ -26,9 +28,11 @@
     </div>
     <!-- 按钮 -->
     <a class="weui-btn weui-btn_default"
+      @click="handleCheckNewMobile"
       style="width: 320px;"
       :style="[{'border': '1px solid' + theme}, {'color': theme}]"
-      href="javascript:;" @click="handleCheckOldMobile">下一步</a>
+      href="javascript:;">保存并验证</a>
+
 
 
       <!--BEGIN toast-->
@@ -72,9 +76,8 @@ export default {
   methods: {
     getDatas () {
       this.theme = localStorage.getItem('theme')
-      this.mobile = localStorage.getItem('mobile')
     },
-    handleCheckOldMobile () {
+    handleCheckNewMobile () {
       axios.post(httpUrl.handleSendCode, this.verCode)
       .then(res => {
         if (res.data.errcode === 0) {
@@ -85,7 +88,7 @@ export default {
           }, 2000)
           // 模拟用户输入
           // this.verCode = '3dxbr6'
-          this.$router.push({ name: 'updatePhone2'})
+          localStorage.mobile = this.mobile
         } else {
           // console.log('发送失败')
           this.isShowFalse = true

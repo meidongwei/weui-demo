@@ -29,7 +29,7 @@
 <script>
 import InfiniteLoading from 'vue-infinite-loading'
 import axios from 'axios'
-import { httpUrl } from '@/http_url'
+import httpUrl from '@/http_url'
 export default {
   components: {
     InfiniteLoading

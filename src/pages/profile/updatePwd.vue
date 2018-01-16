@@ -94,7 +94,7 @@
 
 <script>
 import axios from 'axios'
-import { httpUrl } from '@/http_url'
+import httpUrl from '@/http_url'
 export default {
   data () {
     return {
@@ -129,7 +129,7 @@ export default {
             let _this = this
             axios.post(httpUrl.submitPwd, this.password)
             .then(res => {
-              if (res.data.status) {
+              if (res.data.errcode === 0) {
                 // 服务器保存成功
                 _this.isShowSuccess = true
                 setTimeout(() => {
