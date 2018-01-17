@@ -27,7 +27,11 @@ export default {
     getPayNum () {
       axios.get(httpUrl.getPayNum)
       .then(res => {
-        this.number = res.data.payno
+        if (res.data.errcode == 0) {
+          this.number = res.data.res.payno
+        } else {
+          console.log(res.data.errmsg)
+        }
       })
       .catch(err => console.log(err))
     }

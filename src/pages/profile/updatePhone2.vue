@@ -22,7 +22,7 @@
           <input class="weui-input" type="text"
             style="text-align:right;"
             placeholder="请输入验证码"
-            :value="verCode"/>
+            v-model="verCode"/>
         </div>
       </div>
     </div>
@@ -31,26 +31,26 @@
       @click="handleCheckNewMobile"
       style="width: 320px;"
       :style="[{'border': '1px solid' + theme}, {'color': theme}]"
-      href="javascript:;">保存并验证</a>
+      href="javascript:;">验证并保存</a>
 
 
 
       <!--BEGIN toast-->
-      <div id="toast" v-if="isShowSuccess">
-          <!-- <div class="weui-mask_transparent"></div> -->
-          <div class="weui-toast">
-              <i class="weui-icon-success-no-circle weui-icon_toast"></i>
-              <p class="weui-toast__content">发送成功</p>
-          </div>
-      </div>
-      <div id="toast" v-if="isShowFalse">
-          <!-- <div class="weui-mask_transparent"></div> -->
-          <div class="weui-toast">
-              <i style="color: #fff;margin-bottom: 5px;font-size: 40px;margin-top: 30px;"
-                class="weui-icon-info-circle weui-icon_toast"></i>
-              <p class="weui-toast__content">发送失败</p>
-          </div>
-      </div>
+      <toastSuccess :isShowToast="isShowSendCodeSuccess">
+        <p>发送成功</p>
+      </toastSuccess>
+      <toastFalse :isShowToast="isShowSendCodeFalse">
+        <p>发送失败</p>
+      </toastFalse>
+      <toastSuccess :isShowToast="isShowCheckSuccess">
+        <p>保存成功</p>
+      </toastSuccess>
+      <toastFalse :isShowToast="isShowCheckFalse">
+        <p>保存失败</p>
+      </toastFalse>
+      <toastFalse :isShowToast="isShowNull">
+        <p>选项不能为空</p>
+      </toastFalse>
       <!--end toast-->
 
 
@@ -61,15 +61,24 @@
 </template>
 
 <script>
+import toastSuccess from '@/components/toastSuccess'
+import toastFalse from '@/components/toastFalse'
 import axios from 'axios'
 import httpUrl from '@/http_url'
 export default {
+  components: {
+    toastSuccess,
+    toastFalse
+  },
   data () {
     return {
       theme: '',
       mobile: '',
-      isShowSuccess: false,
-      isShowFalse: false,
+      isShowSendCodeSuccess: false,
+      isShowSendCodeFalse: false,
+      isShowCheckSuccess: false,
+      isShowCheckFalse: false,
+      isShowNull: false,
       verCode: ''
     }
   },
@@ -78,43 +87,56 @@ export default {
       this.theme = localStorage.getItem('theme')
     },
     handleCheckNewMobile () {
-      axios.post(httpUrl.handleSendCode, this.verCode)
-      .then(res => {
-        if (res.data.errcode === 0) {
-          // console.log('发送成功')
-          this.isShowSuccess = true
-          setTimeout(() => {
-            this.isShowSuccess = false
-          }, 2000)
-          // 模拟用户输入
-          // this.verCode = '3dxbr6'
-          localStorage.mobile = this.mobile
-        } else {
-          // console.log('发送失败')
-          this.isShowFalse = true
-          setTimeout(() => {
-            this.isShowFalse = false
-          }, 2000)
-        }
-      })
-      .catch(err => console.log(err))
+      if (this.mobile !== '' && this.verCode !== '') {
+        let bizContent = {}
+        bizContent.verCode = this.verCode
+
+        let param = new URLSearchParams()
+        param.append("bizContent", JSON.stringify(bizContent))
+
+        axios.post(httpUrl.handleSendCode, param)
+        .then(res => {
+          if (res.data.errcode == 0) {
+            this.isShowCheckSuccess = true
+            setTimeout(() => {
+              this.isShowCheckSuccess = false
+            }, 2000)
+            localStorage.mobile = this.mobile
+          } else {
+            this.isShowCheckFalse = true
+            setTimeout(() => {
+              this.isShowCheckFalse = false
+            }, 2000)
+          }
+        })
+        .catch(err => console.log(err))
+      } else {
+        this.isShowNull = true
+        setTimeout(() => {
+          this.isShowNull = false
+        }, 2000)
+      }
     },
     handleSendCode () {
-      axios.post(httpUrl.handleSendCode, this.mobile)
+      let bizContent = {}
+      bizContent.mobile = this.mobile
+
+      let param = new URLSearchParams()
+      param.append("bizContent", JSON.stringify(bizContent))
+
+      axios.post(httpUrl.handleSendCode, param)
       .then(res => {
-        if (res.data.errcode === 0) {
-          // console.log('发送成功')
-          this.isShowSuccess = true
+        if (res.data.errcode == 0) {
+          this.isShowSendCodeSuccess = true
           setTimeout(() => {
-            this.isShowSuccess = false
+            this.isShowSendCodeSuccess = false
           }, 2000)
           // 模拟用户输入
           // this.verCode = '3dxbr6'
         } else {
-          // console.log('发送失败')
-          this.isShowFalse = true
+          this.isShowSendCodeFalse = true
           setTimeout(() => {
-            this.isShowFalse = false
+            this.isShowSendCodeFalse = false
           }, 2000)
         }
       })

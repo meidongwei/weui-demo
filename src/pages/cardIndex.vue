@@ -97,19 +97,23 @@ export default {
     getCardDatas () {
       axios.get(httpUrl.getCardDatas)
       .then(res => {
-        // this.theme = res.data.getCardDatas.theme
-        this.imgUrl = res.data.getCardDatas.cardface
-        this.memberName = res.data.getCardDatas.membername
-        this.cardType = res.data.getCardDatas.mgname
-        this.cardLogoSrc = res.data.getCardDatas.logo
-        this.cardNum = res.data.getCardDatas.memberno
-        this.score = res.data.getCardDatas.integral
-        this.prestore = res.data.getCardDatas.balance/100
-        this.memberid = res.data.getCardDatas.memberid
-        this.mobile = res.data.getCardDatas.mobile
-        this.sex = res.data.getCardDatas.sex
-        this.birthday = res.data.getCardDatas.birthday
-        this.handleStorage()
+        if (res.data.errcode == 0) {
+          this.imgUrl = res.data.res.cardface
+          this.memberName = res.data.res.membername
+          this.cardType = res.data.res.mgname
+          this.cardLogoSrc = res.data.res.logo
+          this.cardNum = res.data.res.memberno
+          this.score = res.data.res.integral
+          this.prestore = res.data.res.balance/100
+          this.memberid = res.data.res.memberid
+          this.mobile = res.data.res.mobile
+          console.log(this.mobile)
+          this.sex = res.data.res.sex
+          this.birthday = res.data.res.birthday
+          this.handleStorage()
+        } else {
+          console.log(res.data.errmsg)
+        }
       })
       .catch(err => console.log(err))
     },

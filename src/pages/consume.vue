@@ -44,14 +44,16 @@ export default {
   },
   methods: {
     infiniteHandler($state) {
-      axios.post(httpUrl.getConsumeDatas, {
-        params: {
-          page: this.consumeList.length / this.number + 1,
-        }
-      })
+      let bizContent = {}
+      bizContent.page = this.consumeList.length / this.number + 1
+
+      let param = new URLSearchParams()
+      param.append("bizContent", JSON.stringify(bizContent))
+
+      axios.post(httpUrl.getConsumeDatas, param)
       .then(res => {
-        if (res.data.getConsumeList.length) {
-          this.consumeList = this.consumeList.concat(res.data.getConsumeList)
+        if (res.data.errcode == 0) {
+          this.consumeList = this.consumeList.concat(res.data.res.getConsumeList)
           $state.loaded()
           // if (this.suiStoreList.length / 10 === 10) {
           //   $state.complete()

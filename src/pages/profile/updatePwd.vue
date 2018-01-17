@@ -45,47 +45,24 @@
       href="javascript:;" @click="submitPwd">保存</a>
 
 
-      <!--BEGIN toast-->
-      <div id="toast" v-if="isShowNull">
-          <!-- <div class="weui-mask_transparent"></div> -->
-          <div class="weui-toast">
-            <i style="color: #fff;margin-bottom: 5px;font-size: 40px;margin-top: 30px;"
-              class="weui-icon-info-circle weui-icon_toast"></i>
-            <p class="weui-toast__content">密码不能为空</p>
-          </div>
-      </div>
-      <div id="toast" v-if="isShowCheckOldPwd">
-          <!-- <div class="weui-mask_transparent"></div> -->
-          <div class="weui-toast">
-            <i style="color: #fff;margin-bottom: 5px;font-size: 40px;margin-top: 30px;"
-              class="weui-icon-info-circle weui-icon_toast"></i>
-            <p class="weui-toast__content">旧密码不正确</p>
-          </div>
-      </div>
-      <div id="toast" v-if="isShowCheckNewPwd">
-          <!-- <div class="weui-mask_transparent"></div> -->
-          <div class="weui-toast">
-            <i style="color: #fff;margin-bottom: 5px;font-size: 40px;margin-top: 30px;"
-              class="weui-icon-info-circle weui-icon_toast"></i>
-            <p class="weui-toast__content">两次密码不一致</p>
-          </div>
-      </div>
-      <div id="toast" v-if="isShowSuccess">
-          <!-- <div class="weui-mask_transparent"></div> -->
-          <div class="weui-toast">
-            <i class="weui-icon-success-no-circle weui-icon_toast"></i>
-            <p class="weui-toast__content">保存成功</p>
-          </div>
-      </div>
-      <div id="toast" v-if="isShowFalse">
-          <!-- <div class="weui-mask_transparent"></div> -->
-          <div class="weui-toast">
-            <i style="color: #fff;margin-bottom: 5px;font-size: 40px;margin-top: 30px;"
-                class="weui-icon-info-circle weui-icon_toast"></i>
-            <p class="weui-toast__content">保存失败</p>
-          </div>
-      </div>
-      <!--end toast-->
+
+    <!--BEGIN toast-->
+    <toastFalse :isShowToast="isShowNull">
+      <p>密码不能为空</p>
+    </toastFalse>
+    <toastFalse :isShowToast="isShowCheckOldPwd">
+      <p>旧密码不正确</p>
+    </toastFalse>
+    <toastFalse :isShowToast="isShowCheckNewPwd">
+      <p>两次密码不一致</p>
+    </toastFalse>
+    <toastSuccess :isShowToast="isShowSuccess">
+      <p>保存成功</p>
+    </toastSuccess>
+    <toastFalse :isShowToast="isShowFalse">
+      <p>保存失败</p>
+    </toastFalse>
+    <!--end toast-->
 
 
 
@@ -93,25 +70,31 @@
 </template>
 
 <script>
+import toastSuccess from '@/components/toastSuccess'
+import toastFalse from '@/components/toastFalse'
 import axios from 'axios'
 import httpUrl from '@/http_url'
 export default {
+  components: {
+    toastSuccess,
+    toastFalse
+  },
   data () {
     return {
       theme: '',
       // 要发送的密码（确认新密码字段）
       password: '',
       // 各种提示窗口
-      isShowSuccess: false,
-      isShowFalse: false,
       isShowNull: false,
       isShowCheckOldPwd: false,
       isShowCheckNewPwd: false,
+      isShowSuccess: false,
+      isShowFalse: false,
       // 验证两次新密码需要的字段
       oldPwd: '',
       newPwd: '',
       // 验证旧密码返回的状态
-      status: false
+      status: 0
     }
   },
   methods: {
@@ -122,35 +105,28 @@ export default {
       // 验证旧密码、新密码、确认新密码是否为空
       if (this.oldPwd !== '' && this.newPwd !== '' && this.password !== '') {
         // 验证旧密码是否正确
-        if (this.status) {
+        if (this.status == 0) {
           // 验证两次密码是否一致
           if (this.checkNewPwd()) {
             // 所有验证通过，发送 password 到服务器
+            let bizContent = {}
+            bizContent.password = this.password
+
+            let param = new URLSearchParams()
+            param.append("bizContent", JSON.stringify(bizContent))
+
             let _this = this
-            axios.post(httpUrl.submitPwd, this.password)
+            axios.post(httpUrl.submitPwd, param)
             .then(res => {
-              if (res.data.errcode === 0) {
-                // 服务器保存成功
+              if (res.data.errcode == 0) {
                 _this.isShowSuccess = true
                 setTimeout(() => {
                   _this.isShowSuccess = false
                 }, 2000)
               } else {
-                // 服务器保存失败
                 _this.isShowFalse = true
                 setTimeout(() => {
                   _this.isShowFalse = false
-                }, 2000)
-              }
-              if (res.data.status) {
-                this.isShowSuccess = true
-                setTimeout(() => {
-                  this.isShowSuccess = false
-                }, 2000)
-              } else {
-                this.isShowFalse = true
-                setTimeout(() => {
-                  this.isShowFalse = false
                 }, 2000)
               }
             })
@@ -178,7 +154,7 @@ export default {
     checkOldPwd () {
       axios.post(httpUrl.checkOldPwd, this.oldPwd)
       .then(res => {
-        this.status = res.data.status
+        this.status = res.data.errcode
       })
       .catch(err => console.log(err))
     },

@@ -49,21 +49,12 @@
 
 
       <!--BEGIN toast-->
-      <div id="toast" v-if="isShowSuccess">
-          <!-- <div class="weui-mask_transparent"></div> -->
-          <div class="weui-toast">
-              <i class="weui-icon-success-no-circle weui-icon_toast"></i>
-              <p class="weui-toast__content">保存成功</p>
-          </div>
-      </div>
-      <div id="toast" v-if="isShowFalse">
-          <!-- <div class="weui-mask_transparent"></div> -->
-          <div class="weui-toast">
-              <i style="color: #fff;margin-bottom: 5px;font-size: 40px;margin-top: 30px;"
-                class="weui-icon-info-circle weui-icon_toast"></i>
-              <p class="weui-toast__content">保存失败</p>
-          </div>
-      </div>
+      <toastSuccess :isShowToast="isShowUpdateSuccess">
+        <p>保存成功</p>
+      </toastSuccess>
+      <toastFalse :isShowToast="isShowUpdateFalse">
+        <p>保存失败</p>
+      </toastFalse>
       <!--end toast-->
 
 
@@ -72,6 +63,8 @@
 </template>
 
 <script>
+import toastSuccess from '@/components/toastSuccess'
+import toastFalse from '@/components/toastFalse'
 import axios from 'axios'
 import httpUrl from '@/http_url'
 // 引入 weui.js 目前用于 picker
@@ -79,14 +72,18 @@ import 'weui'
 import weui from 'weui.js'
 // weui.alert('alert')
 export default {
+  components: {
+    toastSuccess,
+    toastFalse
+  },
   data () {
     return {
       theme: '',
       memberName: '',
       sex: 0,
       birthday: '',
-      isShowSuccess: false,
-      isShowFalse: false
+      isShowUpdateSuccess: false,
+      isShowUpdateFalse: false
     }
   },
   computed: {
@@ -132,28 +129,36 @@ export default {
         +'月'+dateArr[2].replace(/^0/,'')+'日'
     },
     submitInfo () {
-      axios.post(httpUrl.submitInfo,[
-        this.memberName,
-        this.sex,
-        this.birthday
-      ])
+      let bizContent = {}
+      bizContent.name = this.memberName
+      bizContent.sex = this.sex
+      bizContent.birth = this.birthday
+
+      let param = new URLSearchParams()
+      param.append("bizContent", JSON.stringify(bizContent))
+
+      axios.post(httpUrl.submitInfo, param)
       .then(res => {
-        if (res.data.errcode === 0) {
-          this.isShowSuccess = true
+        if (res.data.errcode == 0) {
+          this.isShowUpdateSuccess = true
           setTimeout(() => {
-            this.isShowSuccess = false
+            this.isShowUpdateSuccess = false
           }, 2000)
           localStorage.memberName = this.memberName
           localStorage.sex = this.sex
-          // 把 xx年xx月xx日 的日期转化成 xx-xx-xx 格式，并存入localStorage
-          let arr = []
-          arr.push(this.year[0], this.month[0], this.day[0])
-          let date = arr.join('-')
+          // 日期存入 localStorage 前
+          // 先把 xx年xx月xx日 转化成 xx-xx-xx 格式
+          let m = this.month[0]
+          let d = this.day[0]
+          m = m < 10 ? '0' + m : m
+          d = d < 10 ? '0' + d : d
+          let date = this.year[0] + '-' + m + '-' + d
+
           localStorage.birthday = date
         } else {
-          this.isShowFalse = true
+          this.isShowUpdateFalse = true
           setTimeout(() => {
-            this.isShowFalse = false
+            this.isShowUpdateFalse = false
           }, 2000)
         }
       })
@@ -162,9 +167,6 @@ export default {
   },
   created () {
     this.getDatas()
-    // this.proName = this.$route.query.proName
-    // this.proSex = this.$route.query.proSex
-    // this.proBirthday = this.$route.query.proBirthday
   }
 }
 </script>

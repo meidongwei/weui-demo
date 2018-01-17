@@ -65,21 +65,12 @@
 
 
     <!--BEGIN toast-->
-    <div id="toast" v-if="isShowSuccess">
-        <!-- <div class="weui-mask_transparent"></div> -->
-        <div class="weui-toast">
-            <i class="weui-icon-success-no-circle weui-icon_toast"></i>
-            <p class="weui-toast__content">操作成功</p>
-        </div>
-    </div>
-    <div id="toast" v-if="isShowFalse">
-        <!-- <div class="weui-mask_transparent"></div> -->
-        <div class="weui-toast">
-            <i style="color: #fff;margin-bottom: 5px;font-size: 40px;margin-top: 30px;"
-              class="weui-icon-info-circle weui-icon_toast"></i>
-            <p class="weui-toast__content">操作失败</p>
-        </div>
-    </div>
+    <toastSuccess :isShowToast="isShowResetSuccess">
+      <p>重置成功</p>
+    </toastSuccess>
+    <toastFalse :isShowToast="isShowResetFalse">
+      <p>重置失败</p>
+    </toastFalse>
     <!--end toast-->
 
 
@@ -88,17 +79,23 @@
 </template>
 
 <script>
+import toastSuccess from '@/components/toastSuccess'
+import toastFalse from '@/components/toastFalse'
 import axios from 'axios'
 import httpUrl from '@/http_url.js'
 export default {
+  components: {
+    toastSuccess,
+    toastFalse
+  },
   data () {
     return {
       mobile: 0,
       memberName: '',
       sex: 0,
       birthday: '',
-      isShowSuccess: false,
-      isShowFalse: false
+      isShowResetSuccess: false,
+      isShowResetFalse: false
     }
   },
   methods: {
@@ -107,22 +104,22 @@ export default {
       this.memberName = localStorage.getItem('memberName')
       this.sex = localStorage.getItem('sex')
       this.birthday = localStorage.getItem('birthday')
-      var dateArr = this.birthday.split('-')
+      let dateArr = this.birthday.split('-')
       this.birthday = dateArr[0]+'年'+dateArr[1].replace(/^0/,'')
         +'月'+dateArr[2].replace(/^0/,'')+'日'
     },
     resetPwd () {
       axios.get(httpUrl.resetPwd)
       .then(res => {
-        if (res.data.errcode === 0) {
-          this.isShowSuccess = true
+        if (res.data.errcode == 0) {
+          this.isShowResetSuccess = true
           setTimeout(() => {
-            this.isShowSuccess = false
+            this.isShowResetSuccess = false
           }, 2000)
         } else {
-          this.isShowFalse = true
+          this.isShowResetFalse = true
           setTimeout(() => {
-            this.isShowFalse = false
+            this.isShowResetFalse = false
           }, 2000)
         }
       })
