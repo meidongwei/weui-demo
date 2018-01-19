@@ -53,7 +53,7 @@
         <p>保存成功</p>
       </toastSuccess>
       <toastFalse :isShowToast="isShowUpdateFalse">
-        <p>保存失败</p>
+        <p>{{ errmsg }}</p>
       </toastFalse>
       <toastFalse :isShowToast="isShowNull">
         <p>姓名不能为空</p>
@@ -87,7 +87,8 @@ export default {
       birthday: '',
       isShowUpdateSuccess: false,
       isShowUpdateFalse: false,
-      isShowNull: false
+      isShowNull: false,
+      errmsg: ''
     }
   },
   computed: {
@@ -141,7 +142,7 @@ export default {
       //   +'月'+dateArr[2].replace(/^0/,'')+'日'
     },
     submitInfo () {
-      if (this.memberName !== "") {
+      if (this.memberName.length !== 0) {
         let bizContent = {}
         bizContent.membername = this.memberName
         bizContent.sex = this.sex
@@ -171,6 +172,7 @@ export default {
             localStorage.sex = this.sex
             localStorage.birthday = this.birthday
           } else {
+            this.errmsg = res.data.errmsg
             this.isShowUpdateFalse = true
             setTimeout(() => {
               this.isShowUpdateFalse = false

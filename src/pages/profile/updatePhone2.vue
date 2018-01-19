@@ -46,10 +46,13 @@
         <p>保存成功</p>
       </toastSuccess>
       <toastFalse :isShowToast="isShowCheckFalse">
-        <p>保存失败</p>
+        <p>{{ errmsg }}</p>
       </toastFalse>
-      <toastFalse :isShowToast="isShowNull">
-        <p>选项不能为空</p>
+      <toastFalse :isShowToast="isShowPhoneNull">
+        <p>手机号不能为空</p>
+      </toastFalse>
+      <toastFalse :isShowToast="isShowCodeNull">
+        <p>验证码不能为空</p>
       </toastFalse>
       <!--end toast-->
 
@@ -78,8 +81,10 @@ export default {
       isShowSendCodeFalse: false,
       isShowCheckSuccess: false,
       isShowCheckFalse: false,
-      isShowNull: false,
-      verCode: ''
+      isShowPhoneNull: false,
+      isShowCodeNull: false,
+      verCode: '',
+      errmsg: ''
     }
   },
   methods: {
@@ -87,37 +92,53 @@ export default {
       this.theme = localStorage.getItem('theme')
     },
     handleCheckNewMobile () {
-      if (this.mobile !== '' && this.verCode !== '') {
-        let bizContent = {}
-        bizContent.code = this.verCode
-        bizContent.mobile = this.mobile
-        bizContent.cno = localStorage.getItem('memberno')
-
-        let param = new URLSearchParams()
-        param.append("bizContent", JSON.stringify(bizContent))
-
-        axios.post(httpUrl.handleSendCode, param)
-        .then(res => {
-          if (res.data.errcode === 0) {
-            this.isShowCheckSuccess = true
-            setTimeout(() => {
-              this.isShowCheckSuccess = false
-            }, 2000)
-            localStorage.mobile = this.mobile
-          } else {
-            this.isShowCheckFalse = true
-            setTimeout(() => {
-              this.isShowCheckFalse = false
-            }, 2000)
-          }
-        })
-        .catch(err => console.log(err))
-      } else {
-        this.isShowNull = true
-        setTimeout(() => {
-          this.isShowNull = false
-        }, 2000)
+      // 验证表单
+      if (!this.checkForm()) {
+        return
       }
+      // 验证通过发送请求
+      let bizContent = {}
+      bizContent.code = this.verCode
+      bizContent.mobile = this.mobile
+      bizContent.cno = localStorage.getItem('memberno')
+
+      let param = new URLSearchParams()
+      param.append("bizContent", JSON.stringify(bizContent))
+
+      axios.post(httpUrl.updateMemberMobile, param)
+      .then(res => {
+        if (res.data.errcode === 0) {
+          this.isShowCheckSuccess = true
+          setTimeout(() => {
+            this.isShowCheckSuccess = false
+          }, 2000)
+          localStorage.mobile = this.mobile
+        } else {
+          this.errmsg = res.data.errmsg
+          this.isShowCheckFalse = true
+          setTimeout(() => {
+            this.isShowCheckFalse = false
+          }, 2000)
+        }
+      })
+      .catch(err => console.log(err))
+    },
+    checkForm () {
+      if (this.mobile.length === 0) {
+        this.isShowPhoneNull = true
+        setTimeout(() => {
+          this.isShowPhoneNull = false
+        }, 2000)
+        return false
+      }
+      if (this.verCode.length === 0) {
+        this.isShowCodeNull = true
+        setTimeout(() => {
+          this.isShowCodeNull = false
+        }, 2000)
+        return false
+      }
+      return true
     },
     handleSendCode () {
       if (this.mobile !== '') {

@@ -72,7 +72,7 @@
       <p>重置成功</p>
     </toastSuccess>
     <toastFalse :isShowToast="isShowResetFalse">
-      <p>重置失败</p>
+      <p>{{ errmsg }}</p>
     </toastFalse>
     <!--end toast-->
 
@@ -98,7 +98,8 @@ export default {
       sex: 0,
       birthday: '',
       isShowResetSuccess: false,
-      isShowResetFalse: false
+      isShowResetFalse: false,
+      errmsg: ''
     }
   },
   methods: {
@@ -130,6 +131,7 @@ export default {
             this.isShowResetSuccess = false
           }, 2000)
         } else {
+          this.errmsg = res.data.errmsg
           this.isShowResetFalse = true
           setTimeout(() => {
             this.isShowResetFalse = false

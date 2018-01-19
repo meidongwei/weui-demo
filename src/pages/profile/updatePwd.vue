@@ -46,8 +46,14 @@
 
 
     <!--BEGIN toast-->
-    <toastFalse :isShowToast="isShowNull">
-      <p>密码不能为空</p>
+    <toastFalse :isShowToast="isShowOldNull">
+      <p>请输入旧密码</p>
+    </toastFalse>
+    <toastFalse :isShowToast="isShowNewNull">
+      <p>请输入新密码</p>
+    </toastFalse>
+    <toastFalse :isShowToast="isShowPasswordNull">
+      <p>请确认新密码</p>
     </toastFalse>
     <toastFalse :isShowToast="isShowCheckOldPwd">
       <p>旧密码不正确</p>
@@ -59,7 +65,7 @@
       <p>保存成功</p>
     </toastSuccess>
     <toastFalse :isShowToast="isShowFalse">
-      <p>保存失败</p>
+      <p>{{ errmsg }}</p>
     </toastFalse>
     <!--end toast-->
 
@@ -81,10 +87,10 @@ export default {
   data () {
     return {
       theme: '',
-      // 要发送的密码（确认新密码字段）
-      password: '',
       // 各种提示窗口
-      isShowNull: false,
+      isShowOldNull: false,
+      isShowNewNull: false,
+      isShowPasswordNull: false,
       isShowCheckOldPwd: false,
       isShowCheckNewPwd: false,
       isShowSuccess: false,
@@ -92,8 +98,9 @@ export default {
       // 验证两次新密码需要的字段
       oldPwd: '',
       newPwd: '',
-      // 验证旧密码返回的状态
-      status: 0
+      // 要发送的密码（确认新密码字段）
+      password: '',
+      errmsg: ''
     }
   },
   methods: {
@@ -101,63 +108,67 @@ export default {
       this.theme = localStorage.getItem('theme')
     },
     submitPwd () {
-      // 验证旧密码、新密码、确认新密码是否为空
-      if (this.oldPwd !== '' && this.newPwd !== '' && this.password !== '') {
-        // 验证两次密码是否一致
-        if (this.newPwd === this.password ? true : false) {
-          // 所有验证通过，发送 password 到服务器
-          let bizContent = {}
-          bizContent.cno = localStorage.getItem('memberno')
-          bizContent.oldpwd = this.oldPwd
-          bizContent.newpwd = this.password
+      // 验证表单
+      if (!this.checkForm()) {
+        return
+      }
+      // 验证通过发送请求
+      let bizContent = {}
+      bizContent.cno = localStorage.getItem('memberno')
+      bizContent.oldpwd = this.oldPwd
+      bizContent.newpwd = this.password
 
-          let param = new URLSearchParams()
-          param.append("bizContent", JSON.stringify(bizContent))
+      let param = new URLSearchParams()
+      param.append("bizContent", JSON.stringify(bizContent))
 
-          axios.post(httpUrl.submitPwd, param)
-          .then(res => {
-            if (res.data.errcode == 0) {
-              this.isShowSuccess = true
-              setTimeout(() => {
-                this.isShowSuccess = false
-              }, 2000)
-            } else {
-              this.isShowFalse = true
-              setTimeout(() => {
-                this.isShowFalse = false
-              }, 2000)
-            }
-          })
-          .catch(err => console.log(err))
-        } else {
-          this.isShowCheckNewPwd = true
+      axios.post(httpUrl.submitPwd, param)
+      .then(res => {
+        if (res.data.errcode === 0) {
+          this.isShowSuccess = true
           setTimeout(() => {
-            this.isShowCheckNewPwd = false
+            this.isShowSuccess = false
+          }, 2000)
+        } else {
+          this.errmsg = res.data.errmsg
+          this.isShowFalse = true
+          setTimeout(() => {
+            this.isShowFalse = false
           }, 2000)
         }
-      } else {
-        this.isShowNull = true
-        setTimeout(() => {
-          this.isShowNull = false
-        }, 2000)
-      }
+      })
+      .catch(err => console.log(err))
     },
-    // 旧密码失焦事件，把返回的状态放在 status 里
-    // checkOldPwd () {
-    //   axios.post(httpUrl.checkOldPwd, this.oldPwd)
-    //   .then(res => {
-    //     this.status = res.data.errcode
-    //   })
-    //   .catch(err => console.log(err))
-    // },
-    // 验证两次密码是否一致的事件
-    // checkNewPwd () {
-    //   if (this.newPwd === this.password) {
-    //     return true
-    //   } else {
-    //     return false
-    //   }
-    // }
+    checkForm () {
+      if (this.oldPwd.length === 0) {
+        this.isShowOldNull = true
+        setTimeout(() => {
+          this.isShowOldNull = false
+        }, 2000)
+        return false
+      }
+      if (this.newPwd.length === 0) {
+        this.isShowNewNull = true
+        setTimeout(() => {
+          this.isShowNewNull = false
+        }, 2000)
+        return false
+      }
+      if (this.password.length === 0) {
+        this.isShowPasswordNull = true
+        setTimeout(() => {
+          this.isShowPasswordNull = false
+        }, 2000)
+        return false
+      }
+      if (this.newPwd !== this.password) {
+        this.isShowCheckNewPwd = true
+        setTimeout(() => {
+          this.isShowCheckNewPwd = false
+        }, 2000)
+        return false
+      }
+      return true
+    }
   },
   created () {
     this.getTheme()

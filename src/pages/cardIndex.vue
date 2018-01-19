@@ -65,6 +65,17 @@
       style="width: 188px;"
       :style="[{'border': '1px solid' + theme}, {'color': theme}]"
       href="javascript:;">进入微信卡包</a>
+
+
+
+      <!--BEGIN toast-->
+      <toastFalse :isShowToast="isShowMsg">
+        <p>{{ errmsg }}</p>
+      </toastFalse>
+      <!--end toast-->
+
+
+
   </div>
 </template>
 
@@ -73,9 +84,11 @@ import 'vue-awesome/icons/qrcode'
 import Icon from 'vue-awesome/components/Icon'
 import axios from 'axios'
 import httpUrl from '@/http_url'
+import toastFalse from '@/components/toastFalse'
 export default {
   components: {
-    Icon
+    Icon,
+    toastFalse
   },
   data () {
     return {
@@ -90,14 +103,16 @@ export default {
       memberid: 0,
       mobile: '',
       sex: 0,
-      birthday: ''
+      birthday: '',
+      isShowMsg: false,
+      errmsg: ''
     }
   },
   methods: {
     getCardDatas () {
       axios.get(httpUrl.getCardDatas)
       .then(res => {
-        if (res.data.errcode == 0) {
+        if (res.data.errcode === 0) {
           this.imgUrl = res.data.res.cardface
           this.memberName = res.data.res.membername
           this.cardType = res.data.res.mgname
@@ -111,7 +126,11 @@ export default {
           this.birthday = res.data.res.birthday
           this.handleStorage()
         } else {
-          console.log(res.data.errmsg)
+          this.errmsg = res.data.errmsg
+          this.isShowMsg = true
+          setTimeout(() => {
+            this.isShowMsg = false
+          }, 2000)
         }
       })
       .catch(err => console.log(err))
