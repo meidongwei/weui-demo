@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- card -->
-    <div :style="[{backgroundImage: 'url(' + imgUrl + ')' }, {'background-color': theme}]" class="card">
+    <div :style="[{backgroundImage: 'url(' + imgUrl + ')' }]" class="card">
       <div class="card-header">
         <div class="card-logo-box">
           <div class="card-logo">
@@ -53,12 +53,12 @@
         </div>
         <div class="weui-cell__ft"></div>
       </router-link>
-      <router-link to="/suiStore" class="weui-cell weui-cell_access">
+      <!-- <router-link to="/suiStore" class="weui-cell weui-cell_access">
         <div class="weui-cell__bd">
           <p>适用门店</p>
         </div>
         <div class="weui-cell__ft"></div>
-      </router-link>
+      </router-link> -->
     </div>
     <!-- 按钮 -->
     <a class="weui-btn weui-btn_default"
@@ -101,13 +101,12 @@ export default {
           this.imgUrl = res.data.res.cardface
           this.memberName = res.data.res.membername
           this.cardType = res.data.res.mgname
-          this.cardLogoSrc = res.data.res.logo
+          this.cardLogoSrc = 'data:image/jpeg;base64,' + res.data.res.logo
           this.cardNum = res.data.res.memberno
           this.score = res.data.res.integral
           this.prestore = res.data.res.balance/100
           this.memberid = res.data.res.memberid
           this.mobile = res.data.res.mobile
-          console.log(this.mobile)
           this.sex = res.data.res.sex
           this.birthday = res.data.res.birthday
           this.handleStorage()
@@ -119,13 +118,13 @@ export default {
     },
     handleStorage () {
       if (typeof(Storage) !== "undefined") {
-        localStorage.theme = this.theme;
+        localStorage.theme = this.theme
         localStorage.memberName = this.memberName
         localStorage.memberid = this.memberid
+        localStorage.memberno = this.cardNum
         localStorage.mobile = this.mobile
         localStorage.sex = this.sex
         localStorage.birthday = this.birthday
-        // console.log(localStorage)
       } else {
         console.log('对不起，您的浏览器不支持 web 存储')
       }
@@ -144,13 +143,11 @@ export default {
   border-radius: 5px;
   margin: 20px auto 20px;
   box-shadow: 0 0 2px lightgray;
-  /* background: url('../assets/05.png'); */
-  background-size: 325px;
+  background-size: 100% 100%;
   background-repeat: no-repeat;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  /* background-color: rgb(3, 165, 173); */
 }
 .card-header {
   padding: 16px;

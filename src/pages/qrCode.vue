@@ -25,9 +25,15 @@ export default {
   },
   methods: {
     getPayNum () {
-      axios.get(httpUrl.getPayNum)
+      let bizContent = {}
+      bizContent.memberid = Number(localStorage.getItem('memberid'))
+
+      let param = new URLSearchParams()
+      param.append("bizContent", JSON.stringify(bizContent))
+
+      axios.post(httpUrl.getPayNum, param)
       .then(res => {
-        if (res.data.errcode == 0) {
+        if (res.data.errcode === 0) {
           this.number = res.data.res.payno
         } else {
           console.log(res.data.errmsg)

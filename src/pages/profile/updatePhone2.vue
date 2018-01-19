@@ -89,14 +89,16 @@ export default {
     handleCheckNewMobile () {
       if (this.mobile !== '' && this.verCode !== '') {
         let bizContent = {}
-        bizContent.verCode = this.verCode
+        bizContent.code = this.verCode
+        bizContent.mobile = this.mobile
+        bizContent.cno = localStorage.getItem('memberno')
 
         let param = new URLSearchParams()
         param.append("bizContent", JSON.stringify(bizContent))
 
         axios.post(httpUrl.handleSendCode, param)
         .then(res => {
-          if (res.data.errcode == 0) {
+          if (res.data.errcode === 0) {
             this.isShowCheckSuccess = true
             setTimeout(() => {
               this.isShowCheckSuccess = false
@@ -118,29 +120,37 @@ export default {
       }
     },
     handleSendCode () {
-      let bizContent = {}
-      bizContent.mobile = this.mobile
+      if (this.mobile !== '') {
+        let bizContent = {}
+        bizContent.mobile = this.mobile
+        bizContent.cno = localStorage.getItem('memberno')
 
-      let param = new URLSearchParams()
-      param.append("bizContent", JSON.stringify(bizContent))
+        let param = new URLSearchParams()
+        param.append("bizContent", JSON.stringify(bizContent))
 
-      axios.post(httpUrl.handleSendCode, param)
-      .then(res => {
-        if (res.data.errcode == 0) {
-          this.isShowSendCodeSuccess = true
-          setTimeout(() => {
-            this.isShowSendCodeSuccess = false
-          }, 2000)
-          // 模拟用户输入
-          // this.verCode = '3dxbr6'
-        } else {
-          this.isShowSendCodeFalse = true
-          setTimeout(() => {
-            this.isShowSendCodeFalse = false
-          }, 2000)
-        }
-      })
-      .catch(err => console.log(err))
+        axios.post(httpUrl.handleSendCode, param)
+        .then(res => {
+          if (res.data.errcode == 0) {
+            this.isShowSendCodeSuccess = true
+            setTimeout(() => {
+              this.isShowSendCodeSuccess = false
+            }, 2000)
+            // 模拟用户输入
+            // this.verCode = '3dxbr6'
+          } else {
+            this.isShowSendCodeFalse = true
+            setTimeout(() => {
+              this.isShowSendCodeFalse = false
+            }, 2000)
+          }
+        })
+        .catch(err => console.log(err))
+      } else {
+        this.isShowNull = true
+        setTimeout(() => {
+          this.isShowNull = false
+        }, 2000)
+      }
     }
   },
   created () {

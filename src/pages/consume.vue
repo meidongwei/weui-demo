@@ -2,25 +2,26 @@
   <div>
     <!-- 循环 -->
     <div dis-hover v-for="(item, index) in consumeList" :key="index" class="segment"
-      :class="[item.isSuccess ? 'green' : 'red']">
+      :class="[item.status == 1 ? 'green' : 'red']">
       <div class="header">
-        <h3 v-if="item.isSuccess">消费金额：{{ item.conMoney }}元</h3>
-        <h3 v-else style="color: #eb6941;">取消消费：{{ item.conMoney }}元</h3>
-        <span>{{ item.conDate }}</span>
+        <h3 v-if="item.status == 1">消费金额：{{ (item.balance/100 + item.credit + item.payamount/100).toFixed(2) }}元</h3>
+        <h3 v-else style="color: #eb6941;">取消消费：{{ (item.balance/100 + item.credit + item.payamount/100).toFixed(2) }}元</h3>
+        <span>{{ item.finaltime }}</span>
       </div>
-      <div class="address">消费门店：{{ item.conAddress }}</div>
+      <div class="address">消费门店：{{ item.ognname }}</div>
       <ul class="else">
-        <li>预存支付：{{ item.conPrestore }}元</li>
-        <li>积分支付：{{ item.conScore }}元</li>
-        <li>其他支付：{{ item.conElse }}元</li>
+        <li>预存支付：{{ (item.balance/100).toFixed(2) }}元</li>
+        <li>积分支付：{{ item.credit }}元</li>
+        <li>其他支付：{{ (item.payamount/100).toFixed(2) }}元</li>
       </ul>
     </div>
     <!-- end 循环 -->
-    <!-- bubbles  circles  spiral  waveDots -->
+
+    <!-- spinner: bubbles  circles  spiral  waveDots -->
     <infinite-loading spinner="waveDots"
       @infinite="infiniteHandler">
       <span slot="no-more">
-        There is no more datas :(
+        没有更多信息了 : (
       </span>
     </infinite-loading>
 
@@ -38,27 +39,35 @@ export default {
   data () {
     return {
       consumeList: [],
+      // 当前第几页
+      // pageNo: 1，
       // 每页显示条数
-      number: 5
+      pageSize: 5
+
     }
   },
   methods: {
     infiniteHandler($state) {
+
       let bizContent = {}
-      bizContent.page = this.consumeList.length / this.number + 1
+      bizContent.cno = localStorage.getItem('memberno')
+      bizContent.pageNo = Math.ceil(this.consumeList.length / this.pageSize) + 1
+      bizContent.pageSize = this.pageSize
 
       let param = new URLSearchParams()
       param.append("bizContent", JSON.stringify(bizContent))
 
       axios.post(httpUrl.getConsumeDatas, param)
       .then(res => {
-        if (res.data.errcode == 0) {
-          this.consumeList = this.consumeList.concat(res.data.res.getConsumeList)
+        // res.data.res为数组，判断数组是否有数据
+        // 有数据就 concat ，并且 loaded（）
+        // 没有数据就提示：没有更多数据了
+        if (res.data.res.length > 0) {
+          this.consumeList = this.consumeList.concat(res.data.res)
           $state.loaded()
-          // if (this.suiStoreList.length / 10 === 10) {
-          //   $state.complete()
-          // }
+          // this.pageNo = this.pageNo + 1
         } else {
+          // 显示： 没有更多信息了
           $state.complete()
         }
       })

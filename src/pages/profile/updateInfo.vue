@@ -19,11 +19,11 @@
         </div>
         <div class="weui-cell__bd" style="display:flex;justify-content:flex-end;">
           <div style="margin-right: 15px;">
-            <input v-model="sex" value="1" id="boy" type="radio"/>
+            <input v-model.number="sex" value="1" id="boy" type="radio"/>
             <label for="boy">男</label>
           </div>
           <div>
-            <input v-model="sex" value="2" id="girl" type="radio"/>
+            <input v-model.number="sex" value="2" id="girl" type="radio"/>
             <label for="girl">女</label>
           </div>
         </div>
@@ -55,6 +55,9 @@
       <toastFalse :isShowToast="isShowUpdateFalse">
         <p>保存失败</p>
       </toastFalse>
+      <toastFalse :isShowToast="isShowNull">
+        <p>姓名不能为空</p>
+      </toastFalse>
       <!--end toast-->
 
 
@@ -83,7 +86,8 @@ export default {
       sex: 0,
       birthday: '',
       isShowUpdateSuccess: false,
-      isShowUpdateFalse: false
+      isShowUpdateFalse: false,
+      isShowNull: false
     }
   },
   computed: {
@@ -112,9 +116,15 @@ export default {
         onConfirm (result) {
           const arr = new Array()
           result.forEach(item => {
-            arr.push(item.label)
+            if (item.value > 12) {
+              arr.push(item.label)
+            } else if (item.value < 10) {
+              arr.push('0' + item.label)
+            } else {
+              arr.push(item.label)
+            }
           })
-          _this.birthday = arr.join('')
+          _this.birthday = arr.join('') // 1987-01-01
         },
         id: 'datePicker'
       })
@@ -122,47 +132,58 @@ export default {
     getDatas () {
       this.theme = localStorage.getItem('theme')
       this.memberName = localStorage.getItem('memberName')
-      this.sex = localStorage.getItem('sex')
+      this.sex = Number(localStorage.getItem('sex'))
       this.birthday = localStorage.getItem('birthday')
-      var dateArr = this.birthday.split('-')
-      this.birthday = dateArr[0]+'年'+dateArr[1].replace(/^0/,'')
-        +'月'+dateArr[2].replace(/^0/,'')+'日'
+      this.memberid = Number(localStorage.getItem('memberid'))
+      // 2018-01-18 转 2018年1月18日
+      // var dateArr = this.birthday.split('-')
+      // this.birthday = dateArr[0]+'年'+dateArr[1].replace(/^0/,'')
+      //   +'月'+dateArr[2].replace(/^0/,'')+'日'
     },
     submitInfo () {
-      let bizContent = {}
-      bizContent.name = this.memberName
-      bizContent.sex = this.sex
-      bizContent.birth = this.birthday
+      if (this.memberName !== "") {
+        let bizContent = {}
+        bizContent.membername = this.memberName
+        bizContent.sex = this.sex
+        bizContent.memberid = this.memberid
+        // 2018年01月18日 转换成 2018-01-18
+        let result = /^(\d+)年(\d+)月(\d+)日$/.exec(this.birthday)
+        let y = result[1]
+        let m = result[2]
+        var d = result[3]
+        let birthday = y + '-' + m + '-' + d
 
-      let param = new URLSearchParams()
-      param.append("bizContent", JSON.stringify(bizContent))
+        bizContent.birthday = birthday
+        // console.log(bizContent)
 
-      axios.post(httpUrl.submitInfo, param)
-      .then(res => {
-        if (res.data.errcode == 0) {
-          this.isShowUpdateSuccess = true
-          setTimeout(() => {
-            this.isShowUpdateSuccess = false
-          }, 2000)
-          localStorage.memberName = this.memberName
-          localStorage.sex = this.sex
-          // 日期存入 localStorage 前
-          // 先把 xx年xx月xx日 转化成 xx-xx-xx 格式
-          let m = this.month[0]
-          let d = this.day[0]
-          m = m < 10 ? '0' + m : m
-          d = d < 10 ? '0' + d : d
-          let date = this.year[0] + '-' + m + '-' + d
 
-          localStorage.birthday = date
-        } else {
-          this.isShowUpdateFalse = true
-          setTimeout(() => {
-            this.isShowUpdateFalse = false
-          }, 2000)
-        }
-      })
-      .catch(err => console.log(err))
+        let param = new URLSearchParams()
+        param.append("bizContent", JSON.stringify(bizContent))
+
+        axios.post(httpUrl.submitInfo, param)
+        .then(res => {
+          if (res.data.errcode === 0) {
+            this.isShowUpdateSuccess = true
+            setTimeout(() => {
+              this.isShowUpdateSuccess = false
+            }, 2000)
+            localStorage.memberName = this.memberName
+            localStorage.sex = this.sex
+            localStorage.birthday = this.birthday
+          } else {
+            this.isShowUpdateFalse = true
+            setTimeout(() => {
+              this.isShowUpdateFalse = false
+            }, 2000)
+          }
+        })
+        .catch(err => console.log(err))
+      } else {
+        this.isShowNull = true
+        setTimeout(() => {
+          this.isShowNull = false
+        }, 2000)
+      }
     }
   },
   created () {

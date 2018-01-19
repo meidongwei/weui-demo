@@ -82,7 +82,9 @@ export default {
     handleCheckOldMobile () {
       if (this.verCode !== '') {
         let bizContent = {}
-        bizContent.verCode = this.verCode
+        bizContent.code = this.verCode
+        bizContent.mobile = this.mobile
+        bizContent.cno = localStorage.getItem('memberno')
 
         let param = new URLSearchParams()
         param.append("bizContent", JSON.stringify(bizContent))
@@ -92,6 +94,7 @@ export default {
           if (res.data.errcode == 0) {
             this.$router.push({ name: 'updatePhone2'})
           } else {
+            console.log(errmsg)
             this.isShowCheckFalse = true
             setTimeout(() => {
               this.isShowCheckFalse = false
@@ -109,6 +112,7 @@ export default {
     handleSendCode () {
       let bizContent = {}
       bizContent.mobile = this.mobile
+      bizContent.cno = localStorage.getItem('memberno')
 
       let param = new URLSearchParams()
       param.append("bizContent", JSON.stringify(bizContent))
@@ -116,7 +120,6 @@ export default {
       axios.post(httpUrl.handleSendCode, param)
       .then(res => {
         if (res.data.errcode == 0) {
-          // console.log('发送成功')
           this.isShowSendCodeSuccess = true
           setTimeout(() => {
             this.isShowSendCodeSuccess = false
@@ -124,7 +127,6 @@ export default {
           // 模拟用户输入
           // this.verCode = '3dxbr6'
         } else {
-          // console.log('发送失败')
           this.isShowSendCodeFalse = true
           setTimeout(() => {
             this.isShowSendCodeFalse = false

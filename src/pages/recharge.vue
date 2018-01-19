@@ -2,24 +2,24 @@
   <div>
     <!-- 循环 -->
     <div dis-hover v-for="(item, index) in rechargeList" :key="index" class="segment"
-      :class="[item.isSuccess ? 'green' : 'red']">
+      :class="[item.status == 1 ? 'green' : 'red']">
       <div class="header">
-        <h3 v-if="item.isSuccess">充值金额：{{ item.recMoney }}元</h3>
-        <h3 v-else style="color: #eb6941;">取消消费：{{ item.recMoney }}元</h3>
-        <span>{{ item.recDate }}</span>
+        <h3 v-if="item.status == 1 ">充值金额：{{ (item.money + item.rewardmoney).toFixed(2) }}元</h3>
+        <h3 v-else style="color: #eb6941;">取消消费：{{ (item.money + item.rewardmoney).toFixes(2) }}元</h3>
+        <span>{{ item.finaltime }}</span>
       </div>
-      <div class="address">充值门店：{{ item.recAddress }}</div>
+      <div class="address">充值门店：{{ item.ognname }}</div>
       <ul class="else">
-        <li>实冲金额：{{ item.recActual }}元</li>
-        <li>奖励金额：{{ item.recReward }}元</li>
+        <li>实冲金额：{{ (item.money).toFixed(2) }}元</li>
+        <li>奖励金额：{{ (item.rewardmoney).toFixed(2) }}元</li>
       </ul>
     </div>
     <!-- end 循环 -->
-    <!-- bubbles  circles  spiral  waveDots -->
+
     <infinite-loading spinner="waveDots"
       @infinite="infiniteHandler">
       <span slot="no-more">
-        There is no more datas :(
+        没有更多信息了 : (
       </span>
     </infinite-loading>
 
@@ -38,25 +38,24 @@ export default {
     return {
       rechargeList: [],
       // 每页显示条数
-      number: 5
+      pageSize: 5
     }
   },
   methods: {
     infiniteHandler($state) {
       let bizContent = {}
-      bizContent.page = this.rechargeList.length / this.number + 1
+      bizContent.cno = localStorage.getItem('memberno')
+      bizContent.pageNo = Math.ceil(this.rechargeList.length / this.pageSize) + 1
+      bizContent.pageSize = this.pageSize
 
       let param = new URLSearchParams()
       param.append("bizContent", JSON.stringify(bizContent))
 
       axios.post(httpUrl.getRechargeDatas, param)
       .then(res => {
-        if (res.data.errcode == 0) {
-          this.rechargeList = this.rechargeList.concat(res.data.res.getRechargeList)
+        if (res.data.res.length > 0) {
+          this.rechargeList = this.rechargeList.concat(res.data.res)
           $state.loaded()
-          // if (this.suiStoreList.length / 10 === 10) {
-          //   $state.complete()
-          // }
         } else {
           $state.complete()
         }

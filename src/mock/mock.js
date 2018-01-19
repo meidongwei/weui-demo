@@ -21,7 +21,7 @@ Mock.mock(/getWxUserinfo/, {
 		'birthday': '@date("yyyy-MM-dd")'
   }
 })
-Mock.mock(/handleSendCode/, {
+Mock.mock(/userSendcode/, {
   'errcode|1': [0,-1]
 })
 Mock.mock(/getPayCode/, {
@@ -31,50 +31,44 @@ Mock.mock(/getPayCode/, {
 		'payno': '8000@integer(100000000000, 999999999999)'
 	}
 })
-Mock.mock(/getConsumeDatas/, {
+Mock.mock(/getConsumeList/, {
 	'errcode|1': [0,-1],
 	'errmsg': '错误信息',
-	'res': {
-		'getConsumeList|10': [
-			{
-				'conMoney': '@integer(100,999)',
-		    'conAddress|1': ['渝乡辣婆婆','老酒川菜坊','河北人家'],
-		    'conPrestore': '@integer(10,99)',
-		    'conScore': '@integer(10,99)',
-				'conElse': '@integer(10,99)',
-				'conDate': '@date("yyyy-MM-dd")',
-				'isSuccess': '@boolean'
-			}
-		]
-	}
+	'res|1': [
+		{
+	    'ognname|1': ['渝乡辣婆婆','老酒川菜坊','河北人家'],
+	    'balance': '@integer(10,99)',
+	    'credit': '@integer(10,99)',
+			'payamount': '@integer(10,99)',
+			'finaltime': '@date("yyyy-MM-dd")',
+			'status|1': [1,2]
+		}
+	]
 })
-Mock.mock(/submitInfo/, {
+Mock.mock(/updateMemberInfo/, {
   'errcode|1': [0,-1]
 })
-Mock.mock(/submitPwd/, {
+Mock.mock(/changeMemberPwd/, {
   'errcode|1': [0,-1]
 })
-Mock.mock(/checkOldPwd/, {
+Mock.mock(/updateMemberMobile/, {
   'errcode|1': [0,-1]
 })
 Mock.mock(/resetPwd/, {
   'errcode|1': [0,-1]
 })
-Mock.mock(/getRechargeDatas/, {
+Mock.mock(/getChargeList/, {
 	'errcode|1': [0,-1],
 	'errmsg': '错误信息',
-  'res': {
-		'getRechargeList|4': [
-			{
-				'recMoney': '@integer(100,999)',
-		    'recAddress|1': ['渝乡辣婆婆','老酒川菜坊','河北人家'],
-		    'recDate': '@date("yyyy-MM-dd")',
-		    'recActual': '@integer(10,99)',
-				'recReward': '@integer(10,99)',
-				'isSuccess': '@boolean'
-			}
-		]
-	}
+  'res|10': [
+		{
+	    'ognname|1': ['渝乡辣婆婆','老酒川菜坊','河北人家'],
+	    'finaltime': '@date("yyyy-MM-dd")',
+	    'money': '@integer(10,99)',
+			'rewardmoney': '@integer(10,99)',
+			'status|1': [1,2]
+		}
+	]
 })
 Mock.mock(/getSuiStoreDatas/, {
 	'errcode|1': [0,-1],

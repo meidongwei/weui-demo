@@ -10,8 +10,7 @@
           <input class="weui-input" type="password"
             style="text-align:right;"
             placeholder="请输入旧密码"
-            v-model="oldPwd"
-            @blur="checkOldPwd"/>
+            v-model="oldPwd"/>
         </div>
       </div>
       <div class="weui-cell weui-cell_access">
@@ -104,43 +103,36 @@ export default {
     submitPwd () {
       // 验证旧密码、新密码、确认新密码是否为空
       if (this.oldPwd !== '' && this.newPwd !== '' && this.password !== '') {
-        // 验证旧密码是否正确
-        if (this.status == 0) {
-          // 验证两次密码是否一致
-          if (this.checkNewPwd()) {
-            // 所有验证通过，发送 password 到服务器
-            let bizContent = {}
-            bizContent.password = this.password
+        // 验证两次密码是否一致
+        if (this.newPwd === this.password ? true : false) {
+          // 所有验证通过，发送 password 到服务器
+          let bizContent = {}
+          bizContent.cno = localStorage.getItem('memberno')
+          bizContent.oldpwd = this.oldPwd
+          bizContent.newpwd = this.password
 
-            let param = new URLSearchParams()
-            param.append("bizContent", JSON.stringify(bizContent))
+          let param = new URLSearchParams()
+          param.append("bizContent", JSON.stringify(bizContent))
 
-            let _this = this
-            axios.post(httpUrl.submitPwd, param)
-            .then(res => {
-              if (res.data.errcode == 0) {
-                _this.isShowSuccess = true
-                setTimeout(() => {
-                  _this.isShowSuccess = false
-                }, 2000)
-              } else {
-                _this.isShowFalse = true
-                setTimeout(() => {
-                  _this.isShowFalse = false
-                }, 2000)
-              }
-            })
-            .catch(err => console.log(err))
-          } else {
-            this.isShowCheckNewPwd = true
-            setTimeout(() => {
-              this.isShowCheckNewPwd = false
-            }, 2000)
-          }
+          axios.post(httpUrl.submitPwd, param)
+          .then(res => {
+            if (res.data.errcode == 0) {
+              this.isShowSuccess = true
+              setTimeout(() => {
+                this.isShowSuccess = false
+              }, 2000)
+            } else {
+              this.isShowFalse = true
+              setTimeout(() => {
+                this.isShowFalse = false
+              }, 2000)
+            }
+          })
+          .catch(err => console.log(err))
         } else {
-          this.isShowCheckOldPwd = true
+          this.isShowCheckNewPwd = true
           setTimeout(() => {
-            this.isShowCheckOldPwd = false
+            this.isShowCheckNewPwd = false
           }, 2000)
         }
       } else {
@@ -151,23 +143,21 @@ export default {
       }
     },
     // 旧密码失焦事件，把返回的状态放在 status 里
-    checkOldPwd () {
-      axios.post(httpUrl.checkOldPwd, this.oldPwd)
-      .then(res => {
-        this.status = res.data.errcode
-      })
-      .catch(err => console.log(err))
-    },
+    // checkOldPwd () {
+    //   axios.post(httpUrl.checkOldPwd, this.oldPwd)
+    //   .then(res => {
+    //     this.status = res.data.errcode
+    //   })
+    //   .catch(err => console.log(err))
+    // },
     // 验证两次密码是否一致的事件
-    checkNewPwd () {
-      if (this.newPwd === this.password) {
-        this.isShowNew = false
-        return true
-      } else {
-        this.isShowNew = true
-        return false
-      }
-    }
+    // checkNewPwd () {
+    //   if (this.newPwd === this.password) {
+    //     return true
+    //   } else {
+    //     return false
+    //   }
+    // }
   },
   created () {
     this.getTheme()

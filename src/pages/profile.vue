@@ -1,20 +1,21 @@
 <template>
   <div>
     <!-- 带说明、跳转的列表项 -->
-    <div v-if="mobile!=='undefined'" class="weui-cells" style="margin-bottom: 20px;">
+    <!-- <div v-if="mobile!=='undefined'" class="weui-cells" style="margin-bottom: 20px;">
       <router-link :to="{name: 'updatePhone'}" class="weui-cell weui-cell_access">
         <div class="weui-cell__bd">
           <p>手机</p>
         </div>
         <div class="weui-cell__ft">{{ mobile }}</div>
       </router-link>
-    </div>
-    <div v-else class="weui-cells" style="margin-bottom: 20px;">
+    </div> -->
+    <div class="weui-cells" style="margin-bottom: 20px;">
       <router-link :to="{name: 'updatePhone2'}" class="weui-cell weui-cell_access">
         <div class="weui-cell__bd">
           <p>手机</p>
         </div>
-        <div class="weui-cell__ft">请绑定手机号</div>
+        <div v-if="mobile!=='undefined'" class="weui-cell__ft">{{ mobile }}</div>
+        <div v-else class="weui-cell__ft">请绑定手机号</div>
       </router-link>
     </div>
     <!-- 带说明、跳转的列表项 -->
@@ -32,8 +33,9 @@
           <p>性别</p>
         </div>
         <div class="weui-cell__ft">
-          <p v-if="sex == 1">男</p>
-          <p v-else>女</p>
+          <p v-if="sex === 1">男</p>
+          <p v-else-if="sex === 2">女</p>
+          <p v-else>请选择</p>
         </div>
       </router-link>
       <router-link :to="{name: 'updateInfo'}"
@@ -42,7 +44,8 @@
           <p>生日</p>
         </div>
         <div class="weui-cell__ft">
-          <p>{{ birthday }}</p>
+          <p v-if="birthday !== 'undefined'">{{ birthday }}</p>
+          <p v-else>请选择</p>
         </div>
       </router-link>
     </div>
@@ -102,16 +105,26 @@ export default {
     getProfileDatas () {
       this.mobile = localStorage.getItem('mobile')
       this.memberName = localStorage.getItem('memberName')
-      this.sex = localStorage.getItem('sex')
+      this.sex = Number(localStorage.getItem('sex'))
       this.birthday = localStorage.getItem('birthday')
-      let dateArr = this.birthday.split('-')
-      this.birthday = dateArr[0]+'年'+dateArr[1].replace(/^0/,'')
-        +'月'+dateArr[2].replace(/^0/,'')+'日'
+      // 2018-01-18 转 2018年1月18日
+      // let dateArr = this.birthday.split('-')
+      // this.birthday = this.birthday || dateArr[0]+'年'+dateArr[1].replace(/^0/,'')
+      //   +'月'+dateArr[2].replace(/^0/,'')+'日'
+
+      // 时间戳
+      // this.birthday = this.birthday && new Date(this.birthday * 1000)
     },
     resetPwd () {
-      axios.get(httpUrl.resetPwd)
+      let bizContent = {}
+      bizContent.cno = localStorage.getItem('memberno')
+
+      let param = new URLSearchParams()
+      param.append("bizContent", JSON.stringify(bizContent))
+
+      axios.post(httpUrl.resetPwd, param)
       .then(res => {
-        if (res.data.errcode == 0) {
+        if (res.data.errcode === 0) {
           this.isShowResetSuccess = true
           setTimeout(() => {
             this.isShowResetSuccess = false
