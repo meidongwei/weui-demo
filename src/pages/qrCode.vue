@@ -6,6 +6,7 @@
         style="margin: 20px 0;">
         Can't generate the barcode
       </barcode>
+      <p>{{ errmsg }}</p>
       <qriously :value="number" :size="155"></qriously>
     </div>
   </div>
@@ -20,7 +21,8 @@ export default {
   },
   data () {
     return {
-      number: ''
+      number: '',
+      errmsg: ''
     }
   },
   methods: {
@@ -36,7 +38,7 @@ export default {
         if (res.data.errcode === 0) {
           this.number = res.data.res.payno
         } else {
-          console.log(res.data.errmsg)
+          this.errmsg = res.data.errmsg
         }
       })
       .catch(err => console.log(err))

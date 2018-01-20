@@ -5,7 +5,7 @@
       :class="[item.status == 1 ? 'green' : 'red']">
       <div class="header">
         <h3 v-if="item.status == 1 ">充值金额：{{ (item.money + item.rewardmoney).toFixed(2) }}元</h3>
-        <h3 v-else style="color: #eb6941;">取消消费：{{ (item.money + item.rewardmoney).toFixes(2) }}元</h3>
+        <h3 v-else style="color: #eb6941;">取消消费：{{ (item.money + item.rewardmoney).toFixed(2) }}元</h3>
         <span>{{ item.finaltime }}</span>
       </div>
       <div class="address">充值门店：{{ item.ognname }}</div>
@@ -23,11 +23,18 @@
       </span>
     </infinite-loading>
 
+    <!--BEGIN toast-->
+    <toastFalse :isShowToast="isShowFalse">
+      <p>{{ errmsg }}</p>
+    </toastFalse>
+    <!--end toast-->
+
   </div>
 </template>
 
 <script>
 import InfiniteLoading from 'vue-infinite-loading'
+import toastFalse from '@/components/toastFalse'
 import axios from 'axios'
 import httpUrl from '@/http_url'
 export default {
@@ -38,7 +45,9 @@ export default {
     return {
       rechargeList: [],
       // 每页显示条数
-      pageSize: 5
+      pageSize: 5,
+      isShowFalse: false,
+      errmsg: ''
     }
   },
   methods: {
@@ -53,11 +62,19 @@ export default {
 
       axios.post(httpUrl.getRechargeDatas, param)
       .then(res => {
-        if (res.data.res.length > 0) {
-          this.rechargeList = this.rechargeList.concat(res.data.res)
-          $state.loaded()
+        if (res.data.errcode === 0) {
+          if (res.data.res.length > 0) {
+            this.rechargeList = this.rechargeList.concat(res.data.res)
+            $state.loaded()
+          } else {
+            $state.complete()
+          }
         } else {
-          $state.complete()
+          this.errmsg = res.data.errmsg
+          this.isShowFalse = true
+          setTimeout(() => {
+            this.isShowFalse = false
+          }, 2000)
         }
       })
       .catch(err => console.log(err))

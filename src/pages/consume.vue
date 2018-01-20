@@ -25,16 +25,24 @@
       </span>
     </infinite-loading>
 
+    <!--BEGIN toast-->
+    <toastFalse :isShowToast="isShowFalse">
+      <p>{{ errmsg }}</p>
+    </toastFalse>
+    <!--end toast-->
+
   </div>
 </template>
 
 <script>
 import InfiniteLoading from 'vue-infinite-loading'
+import toastFalse from '@/components/toastFalse'
 import axios from 'axios'
 import httpUrl from '@/http_url'
 export default {
   components: {
-    InfiniteLoading
+    InfiniteLoading,
+    toastFalse
   },
   data () {
     return {
@@ -42,7 +50,9 @@ export default {
       // 当前第几页
       // pageNo: 1，
       // 每页显示条数
-      pageSize: 5
+      pageSize: 5,
+      isShowFalse: false,
+      errmsg: ''
 
     }
   },
@@ -59,16 +69,21 @@ export default {
 
       axios.post(httpUrl.getConsumeDatas, param)
       .then(res => {
-        // res.data.res为数组，判断数组是否有数据
-        // 有数据就 concat ，并且 loaded（）
-        // 没有数据就提示：没有更多数据了
-        if (res.data.res.length > 0) {
-          this.consumeList = this.consumeList.concat(res.data.res)
-          $state.loaded()
-          // this.pageNo = this.pageNo + 1
+        if (res.data.errcode === 0) {
+          if (res.data.res.length > 0) {
+            this.consumeList = this.consumeList.concat(res.data.res)
+            $state.loaded()
+            // this.pageNo = this.pageNo + 1
+          } else {
+            // 显示： 没有更多信息了
+            $state.complete()
+          }
         } else {
-          // 显示： 没有更多信息了
-          $state.complete()
+          this.errmsg = res.data.errmsg
+          this.isShowFalse = true
+          setTimeout(() => {
+            this.isShowFalse = false
+          }, 2000)
         }
       })
       .catch(err => console.log(err))

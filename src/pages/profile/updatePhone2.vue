@@ -40,7 +40,7 @@
         <p>发送成功</p>
       </toastSuccess>
       <toastFalse :isShowToast="isShowSendCodeFalse">
-        <p>发送失败</p>
+        <p>{{ errmsg }}</p>
       </toastFalse>
       <toastSuccess :isShowToast="isShowCheckSuccess">
         <p>保存成功</p>
@@ -141,7 +141,7 @@ export default {
       return true
     },
     handleSendCode () {
-      if (this.mobile !== '') {
+      if (this.mobile.length !== 0) {
         let bizContent = {}
         bizContent.mobile = this.mobile
         bizContent.cno = localStorage.getItem('memberno')
@@ -151,7 +151,7 @@ export default {
 
         axios.post(httpUrl.handleSendCode, param)
         .then(res => {
-          if (res.data.errcode == 0) {
+          if (res.data.errcode === 0) {
             this.isShowSendCodeSuccess = true
             setTimeout(() => {
               this.isShowSendCodeSuccess = false
@@ -159,6 +159,7 @@ export default {
             // 模拟用户输入
             // this.verCode = '3dxbr6'
           } else {
+            this.errmsg = res.data.errmsg
             this.isShowSendCodeFalse = true
             setTimeout(() => {
               this.isShowSendCodeFalse = false
@@ -167,9 +168,9 @@ export default {
         })
         .catch(err => console.log(err))
       } else {
-        this.isShowNull = true
+        this.isShowPhoneNull = true
         setTimeout(() => {
-          this.isShowNull = false
+          this.isShowPhoneNull = false
         }, 2000)
       }
     }

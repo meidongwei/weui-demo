@@ -18,11 +18,12 @@ Mock.mock(/getWxUserinfo/, {
 		'memberid': '@integer(1, 5000)',
 		'mobile|1': ['1850311@integer(1000,9999)', undefined],
 		'sex|1': [1,2],
-		'birthday': '@date("yyyy-MM-dd")'
+		'birthday': '2018年01月02日'
   }
 })
 Mock.mock(/userSendcode/, {
-  'errcode|1': [0,-1]
+  'errcode|1': [0,-1],
+	'errmsg': '发送验证码失败'
 })
 Mock.mock(/getPayCode/, {
 	'errcode|1': [0,-1],
@@ -34,7 +35,7 @@ Mock.mock(/getPayCode/, {
 Mock.mock(/getConsumeList/, {
 	'errcode|1': [0,-1],
 	'errmsg': '错误信息',
-	'res|1': [
+	'res|2': [
 		{
 	    'ognname|1': ['渝乡辣婆婆','老酒川菜坊','河北人家'],
 	    'balance': '@integer(10,99)',
@@ -46,21 +47,25 @@ Mock.mock(/getConsumeList/, {
 	]
 })
 Mock.mock(/updateMemberInfo/, {
-  'errcode|1': [0,-1]
+  'errcode|1': [0,-1],
+	'errmsg': '错误信息'
 })
 Mock.mock(/changeMemberPwd/, {
-  'errcode|1': [0,-1]
+  'errcode|1': [0,-1],
+	'errmsg': '错误信息'
 })
 Mock.mock(/updateMemberMobile/, {
-  'errcode|1': [0,-1]
+  'errcode|1': [0,-1],
+	'errmsg': '错误信息'
 })
-Mock.mock(/resetPwd/, {
-  'errcode|1': [0,-1]
+Mock.mock(/resetMemberPwd/, {
+  'errcode|1': [0,-1],
+	'errmsg': '错误信息'
 })
 Mock.mock(/getChargeList/, {
 	'errcode|1': [0,-1],
 	'errmsg': '错误信息',
-  'res|10': [
+  'res|2': [
 		{
 	    'ognname|1': ['渝乡辣婆婆','老酒川菜坊','河北人家'],
 	    'finaltime': '@date("yyyy-MM-dd")',
