@@ -39,7 +39,8 @@ import axios from 'axios'
 import httpUrl from '@/http_url'
 export default {
   components: {
-    InfiniteLoading
+    InfiniteLoading,
+    toastFalse
   },
   data () {
     return {
