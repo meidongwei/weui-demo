@@ -54,6 +54,9 @@
       <toastFalse :isShowToast="isShowCodeNull">
         <p>验证码不能为空</p>
       </toastFalse>
+      <toastFalse :isShowToast="isShowPhoneError">
+        <p>手机号错误</p>
+      </toastFalse>
       <!--end toast-->
 
 
@@ -83,6 +86,7 @@ export default {
       isShowCheckFalse: false,
       isShowPhoneNull: false,
       isShowCodeNull: false,
+      isShowPhoneError: false,
       verCode: '',
       errmsg: ''
     }
@@ -96,7 +100,11 @@ export default {
       if (!this.checkForm()) {
         return
       }
-      // 验证通过发送请求
+      // 验证手机号11位
+      if (!this.checkPhone()) {
+        return
+      }
+      // success 发送请求
       let bizContent = {}
       bizContent.code = this.verCode
       bizContent.mobile = this.mobile
@@ -123,6 +131,7 @@ export default {
       })
       .catch(err => console.log(err))
     },
+    // 验证手机号、验证码不为空
     checkForm () {
       if (this.mobile.length === 0) {
         this.isShowPhoneNull = true
@@ -140,33 +149,47 @@ export default {
       }
       return true
     },
+    // 验证手机号11位
+    checkPhone () {
+      let re = /^1\d{10}$/
+      if (!re.test(this.mobile)) {
+        this.isShowPhoneError = true
+        setTimeout(() => {
+          this.isShowPhoneError = false
+        }, 2000)
+        return false
+      }
+      return true
+    },
     handleSendCode () {
       if (this.mobile.length !== 0) {
-        let bizContent = {}
-        bizContent.mobile = this.mobile
-        bizContent.cno = localStorage.getItem('memberno')
+        if (this.checkPhone()) {
+          let bizContent = {}
+          bizContent.mobile = this.mobile
+          bizContent.cno = localStorage.getItem('memberno')
 
-        let param = new URLSearchParams()
-        param.append("bizContent", JSON.stringify(bizContent))
+          let param = new URLSearchParams()
+          param.append("bizContent", JSON.stringify(bizContent))
 
-        axios.post(httpUrl.handleSendCode, param)
-        .then(res => {
-          if (res.data.errcode === 0) {
-            this.isShowSendCodeSuccess = true
-            setTimeout(() => {
-              this.isShowSendCodeSuccess = false
-            }, 2000)
-            // 模拟用户输入
-            // this.verCode = '3dxbr6'
-          } else {
-            this.errmsg = res.data.errmsg
-            this.isShowSendCodeFalse = true
-            setTimeout(() => {
-              this.isShowSendCodeFalse = false
-            }, 2000)
-          }
-        })
-        .catch(err => console.log(err))
+          axios.post(httpUrl.handleSendCode, param)
+          .then(res => {
+            if (res.data.errcode === 0) {
+              this.isShowSendCodeSuccess = true
+              setTimeout(() => {
+                this.isShowSendCodeSuccess = false
+              }, 2000)
+              // 模拟用户输入
+              // this.verCode = '3dxbr6'
+            } else {
+              this.errmsg = res.data.errmsg
+              this.isShowSendCodeFalse = true
+              setTimeout(() => {
+                this.isShowSendCodeFalse = false
+              }, 2000)
+            }
+          })
+          .catch(err => console.log(err))
+        }
       } else {
         this.isShowPhoneNull = true
         setTimeout(() => {
