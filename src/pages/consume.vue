@@ -23,6 +23,9 @@
       <span slot="no-more">
         没有更多信息了 : (
       </span>
+      <span slot="no-results">
+        暂无数据 : (
+      </span>
     </infinite-loading>
 
     <!--BEGIN toast-->

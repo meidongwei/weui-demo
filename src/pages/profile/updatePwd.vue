@@ -38,9 +38,8 @@
     </div>
 
     <!-- 按钮 -->
-    <a class="weui-btn weui-btn_default"
+    <a class="weui-btn weui-btn_default m-btn-green"
       style="width: 320px;"
-      :style="[{'border': '1px solid' + theme}, {'color': theme}]"
       href="javascript:;" @click="submitPwd">保存</a>
 
 
@@ -86,7 +85,6 @@ export default {
   },
   data () {
     return {
-      theme: '',
       // 各种提示窗口
       isShowOldNull: false,
       isShowNewNull: false,
@@ -104,9 +102,6 @@ export default {
     }
   },
   methods: {
-    getTheme () {
-      this.theme = localStorage.getItem('theme')
-    },
     submitPwd () {
       // 验证表单
       if (!this.checkForm()) {
@@ -169,9 +164,6 @@ export default {
       }
       return true
     }
-  },
-  created () {
-    this.getTheme()
   }
 }
 </script>

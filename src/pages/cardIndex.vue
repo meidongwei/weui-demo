@@ -61,9 +61,8 @@
       </router-link> -->
     </div>
     <!-- 按钮 -->
-    <a class="weui-btn weui-btn_default"
+    <a class="weui-btn weui-btn_default m-btn-green"
       style="width: 188px;"
-      :style="[{'border': '1px solid' + theme}, {'color': theme}]"
       href="javascript:;">进入微信卡包</a>
 
 
@@ -92,7 +91,6 @@ export default {
   },
   data () {
     return {
-      theme: '#32b16c',
       imgUrl: '',
       memberName: '',
       cardType: '',
@@ -137,7 +135,6 @@ export default {
     },
     handleStorage () {
       if (typeof(Storage) !== "undefined") {
-        localStorage.theme = this.theme
         localStorage.memberName = this.memberName
         localStorage.memberid = this.memberid
         localStorage.memberno = this.cardNum

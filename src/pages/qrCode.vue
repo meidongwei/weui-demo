@@ -4,7 +4,7 @@
       <h4>请让服务员扫码收款</h4>
       <barcode :value="number" font-options="bold"
         style="margin: 20px 0;">
-        Can't generate the barcode
+        加载中...
       </barcode>
       <p>{{ errmsg }}</p>
       <qriously :value="number" :size="155"></qriously>

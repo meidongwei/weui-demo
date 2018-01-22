@@ -14,7 +14,7 @@
         <div class="weui-cell__bd">
           <p>手机</p>
         </div>
-        <div v-if="mobile!=='undefined'" class="weui-cell__ft">{{ mobile }}</div>
+        <div v-if="mobile !== 'undefined' && mobile !== null" class="weui-cell__ft">{{ mobile }}</div>
         <div v-else class="weui-cell__ft">请绑定手机号</div>
       </router-link>
     </div>
@@ -44,7 +44,7 @@
           <p>生日</p>
         </div>
         <div class="weui-cell__ft">
-          <p v-if="birthday !== 'undefined'">{{ birthday }}</p>
+          <p v-if="birthday !== 'undefined' && birthday !== null">{{ birthday }}</p>
           <p v-else>请选择</p>
         </div>
       </router-link>
@@ -82,6 +82,8 @@
 </template>
 
 <script>
+import 'weui'
+import weui from 'weui.js'
 import toastSuccess from '@/components/toastSuccess'
 import toastFalse from '@/components/toastFalse'
 import axios from 'axios'
@@ -143,6 +145,12 @@ export default {
   },
   created () {
     this.getProfileDatas()
+    // 在 profile 页面 showPicker 方法中为 picker 设置自定义类名：
+    // className: 'm-picker', 本页面初始化时获取 picker 对象，判断
+    // picker 对象是否存在，如果存在就隐藏。
+    if (document.getElementsByClassName('m-picker')[0] !== undefined) {
+      weui.datePicker().hide()
+    }
   }
 }
 </script>

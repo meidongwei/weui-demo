@@ -9,9 +9,10 @@
         <input class="weui-input" type="text"
           v-model="mobile" placeholder="请输入新手机号"
           style="width: 170px; text-align:right;">
-        <a @click="handleSendCode" class="weui-btn weui-btn_mini weui-btn_default"
-          style="margin-left: 10px;padding-left: 6px; padding-right: 6px;"
-          :style="[{'border': '1px solid' + theme}, {'color': theme}]"
+        <a @click="handleSendCode" class="m-btn-green"
+          style="margin-left: 10px;padding-left: 6px;
+          padding-right: 6px;padding-top:3px;
+          padding-bottom:3px;font-size:14px;border-radius:3px;"
           href="javascript:;">发送验证码</a>
       </div>
       <div class="weui-cell">
@@ -19,7 +20,7 @@
           <p>验证码</p>
         </div>
         <div class="weui-cell__bd">
-          <input class="weui-input" type="text"
+          <input class="weui-input" type="number"
             style="text-align:right;"
             placeholder="请输入验证码"
             v-model="verCode"/>
@@ -27,10 +28,9 @@
       </div>
     </div>
     <!-- 按钮 -->
-    <a class="weui-btn weui-btn_default"
+    <a class="weui-btn weui-btn_default m-btn-green"
       @click="handleCheckNewMobile"
       style="width: 320px;"
-      :style="[{'border': '1px solid' + theme}, {'color': theme}]"
       href="javascript:;">验证并保存</a>
 
 
@@ -78,7 +78,6 @@ export default {
   },
   data () {
     return {
-      theme: '',
       mobile: '',
       isShowSendCodeSuccess: false,
       isShowSendCodeFalse: false,
@@ -92,9 +91,6 @@ export default {
     }
   },
   methods: {
-    getDatas () {
-      this.theme = localStorage.getItem('theme')
-    },
     handleCheckNewMobile () {
       // 验证表单
       if (!this.checkForm()) {
@@ -197,9 +193,6 @@ export default {
         }, 2000)
       }
     }
-  },
-  created () {
-    this.getDatas()
   }
 }
 </script>

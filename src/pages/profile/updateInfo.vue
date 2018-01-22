@@ -33,17 +33,15 @@
           <p>生日</p>
         </div>
         <div class="weui-cell__bd">
-          <input class="weui-input" type="text"
-            style="text-align:right;"
-            v-model="birthday"
-            @click="showPicker"/>
+          <p class="weui-cell__ft"
+            @click="showPicker"
+            >{{ birthday }}</p>
         </div>
       </div>
     </div>
     <!-- 按钮 -->
-    <a class="weui-btn weui-btn_default"
+    <a class="weui-btn weui-btn_default m-btn-green"
       style="width: 320px;"
-      :style="[{'border': '1px solid' + theme}, {'color': theme}]"
       href="javascript:;" @click="submitInfo">保存</a>
 
 
@@ -55,8 +53,14 @@
       <toastFalse :isShowToast="isShowUpdateFalse">
         <p>{{ errmsg }}</p>
       </toastFalse>
-      <toastFalse :isShowToast="isShowNull">
+      <toastFalse :isShowToast="isShowNameNull">
         <p>姓名不能为空</p>
+      </toastFalse>
+      <toastFalse :isShowToast="isShowSexNull">
+        <p>请选择性别</p>
+      </toastFalse>
+      <toastFalse :isShowToast="isShowBirthdayNull">
+        <p>请选择生日</p>
       </toastFalse>
       <!--end toast-->
 
@@ -81,16 +85,19 @@ export default {
   },
   data () {
     return {
-      theme: '',
       memberName: '',
       sex: 0,
       birthday: '',
       isShowUpdateSuccess: false,
       isShowUpdateFalse: false,
-      isShowNull: false,
+      isShowNameNull: false,
+      isShowSexNull: false,
+      isShowBirthdayNull: false,
       errmsg: ''
     }
   },
+  // 使用 split() 方法去掉字符串中的“年月日”
+  // 年：a[0]  月：b[0]  日：c[0]
   // computed: {
   //   year () {
   //     return this.birthday.split('年')
@@ -105,15 +112,12 @@ export default {
   methods: {
     showPicker () {
       const _this = this
-      // 使用 split() 方法去掉字符串中的“年月日”
-      // 年：a[0]  月：b[0]  日：c[0]
+
       weui.datePicker({
         start: 1960,
         end: new Date().getFullYear(),
         defaultValue: [1980, 6, 6],
-        // onChange (result) {
-        //   console.log(result)
-        // },
+        className: 'm-picker',
         onConfirm (result) {
           const arr = new Array()
           result.forEach(item => {
@@ -131,10 +135,11 @@ export default {
       })
     },
     getDatas () {
-      this.theme = localStorage.getItem('theme')
       this.memberName = localStorage.getItem('memberName')
       this.sex = Number(localStorage.getItem('sex'))
       if (localStorage.getItem('birthday') === 'undefined') {
+        this.birthday = '请选择'
+      } else if (localStorage.getItem('birthday') === null) {
         this.birthday = '请选择'
       } else {
         this.birthday = localStorage.getItem('birthday')
@@ -146,50 +151,65 @@ export default {
       //   +'月'+dateArr[2].replace(/^0/,'')+'日'
     },
     submitInfo () {
-      if (this.memberName.length !== 0) {
-        let bizContent = {}
-        bizContent.membername = this.memberName
-        bizContent.sex = this.sex
-        bizContent.memberid = this.memberid
-        // 2018年01月18日 转换成 2018-01-18
-        let result = /^(\d+)年(\d+)月(\d+)日$/.exec(this.birthday)
-        let y = result[1]
-        let m = result[2]
-        var d = result[3]
-        let birthday = y + '-' + m + '-' + d
-
-        bizContent.birthday = birthday
-        // console.log(bizContent)
-
-
-        let param = new URLSearchParams()
-        param.append("bizContent", JSON.stringify(bizContent))
-
-        axios.post(httpUrl.submitInfo, param)
-        .then(res => {
-          if (res.data.errcode === 0) {
-            this.isShowUpdateSuccess = true
-            setTimeout(() => {
-              this.isShowUpdateSuccess = false
-            }, 2000)
-            localStorage.memberName = this.memberName
-            localStorage.sex = this.sex
-            localStorage.birthday = this.birthday
-          } else {
-            this.errmsg = res.data.errmsg
-            this.isShowUpdateFalse = true
-            setTimeout(() => {
-              this.isShowUpdateFalse = false
-            }, 2000)
-          }
-        })
-        .catch(err => console.log(err))
-      } else {
-        this.isShowNull = true
+      if (this.memberName === 'undefined' || this.memberName === null ) {
+        this.isShowNameNull = true
         setTimeout(() => {
-          this.isShowNull = false
+          this.isShowNameNull = false
         }, 2000)
+        return
       }
+
+      if (this.sex === 0) {
+        this.isShowSexNull = true
+        setTimeout(() => {
+          this.isShowSexNull = false
+        }, 2000)
+        return
+      }
+
+      if (this.birthday === '请选择') {
+        this.isShowBirthdayNull = true
+        setTimeout(() => {
+          this.isShowBirthdayNull = false
+        }, 2000)
+        return
+      }
+
+      let bizContent = {}
+      bizContent.membername = this.memberName
+      bizContent.sex = this.sex
+      bizContent.memberid = this.memberid
+      // 2018年01月18日 转换成 2018-01-18
+      let result = /^(\d+)年(\d+)月(\d+)日$/.exec(this.birthday)
+      let y = result[1]
+      let m = result[2]
+      var d = result[3]
+      let birthday = y + '-' + m + '-' + d
+
+      bizContent.birthday = birthday
+
+      let param = new URLSearchParams()
+      param.append("bizContent", JSON.stringify(bizContent))
+
+      axios.post(httpUrl.submitInfo, param)
+      .then(res => {
+        if (res.data.errcode === 0) {
+          this.isShowUpdateSuccess = true
+          setTimeout(() => {
+            this.isShowUpdateSuccess = false
+          }, 2000)
+          localStorage.memberName = this.memberName
+          localStorage.sex = this.sex
+          localStorage.birthday = this.birthday
+        } else {
+          this.errmsg = res.data.errmsg
+          this.isShowUpdateFalse = true
+          setTimeout(() => {
+            this.isShowUpdateFalse = false
+          }, 2000)
+        }
+      })
+      .catch(err => console.log(err))
     }
   },
   created () {
