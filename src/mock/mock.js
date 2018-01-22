@@ -18,7 +18,7 @@ Mock.mock(/getWxUserinfo/, {
 		'memberid': '@integer(1, 5000)',
 		'mobile|1': ['1850311@integer(1000,9999)', undefined],
 		'sex|1': [1,2],
-		'birthday': '2018年01月02日'
+		'birthday|1': ['2018年01月02日', undefined]
   }
 })
 Mock.mock(/userSendcode/, {

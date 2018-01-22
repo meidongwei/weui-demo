@@ -91,17 +91,17 @@ export default {
       errmsg: ''
     }
   },
-  computed: {
-    year () {
-      return this.birthday.split('年')
-    },
-    month () {
-      return this.year[1].split('月')
-    },
-    day () {
-      return this.month[1].split('日')
-    }
-  },
+  // computed: {
+  //   year () {
+  //     return this.birthday.split('年')
+  //   },
+  //   month () {
+  //     return this.year[1].split('月')
+  //   },
+  //   day () {
+  //     return this.month[1].split('日')
+  //   }
+  // },
   methods: {
     showPicker () {
       const _this = this
@@ -110,7 +110,7 @@ export default {
       weui.datePicker({
         start: 1960,
         end: new Date().getFullYear(),
-        defaultValue: [this.year[0], this.month[0], this.day[0]],
+        defaultValue: [1980, 6, 6],
         // onChange (result) {
         //   console.log(result)
         // },
@@ -134,7 +134,11 @@ export default {
       this.theme = localStorage.getItem('theme')
       this.memberName = localStorage.getItem('memberName')
       this.sex = Number(localStorage.getItem('sex'))
-      this.birthday = localStorage.getItem('birthday')
+      if (localStorage.getItem('birthday') === 'undefined') {
+        this.birthday = '请选择'
+      } else {
+        this.birthday = localStorage.getItem('birthday')
+      }
       this.memberid = Number(localStorage.getItem('memberid'))
       // 2018-01-18 转 2018年1月18日
       // var dateArr = this.birthday.split('-')
