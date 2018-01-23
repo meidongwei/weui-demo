@@ -38,7 +38,7 @@
     </div>
 
     <!-- 按钮 -->
-    <a class="weui-btn weui-btn_default m-btn-green"
+    <a class="weui-btn weui-btn_plain-primary"
       style="width: 320px;"
       href="javascript:;" @click="submitPwd">保存</a>
 

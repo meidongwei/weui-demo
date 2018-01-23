@@ -9,7 +9,7 @@
         <input class="weui-input" type="text"
           v-model="mobile" placeholder="请输入新手机号"
           style="width: 170px; text-align:right;">
-        <a @click="handleSendCode" class="m-btn-green"
+        <a @click="handleSendCode" class="weui-btn_plain-primary"
           style="margin-left: 10px;padding-left: 6px;
           padding-right: 6px;padding-top:3px;
           padding-bottom:3px;font-size:14px;border-radius:3px;"
@@ -28,7 +28,7 @@
       </div>
     </div>
     <!-- 按钮 -->
-    <a class="weui-btn weui-btn_default m-btn-green"
+    <a class="weui-btn weui-btn_plain-primary"
       @click="handleCheckNewMobile"
       style="width: 320px;"
       href="javascript:;">验证并保存</a>

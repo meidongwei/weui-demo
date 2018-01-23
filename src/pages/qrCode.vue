@@ -2,7 +2,7 @@
   <div class="page">
     <div class="bg-white">
       <h4>请让服务员扫码收款</h4>
-      <barcode :value="number" font-options="bold"
+      <barcode :value="_number" width="1" font-options="bold"
         style="margin: 20px 0;">
         加载中...
       </barcode>
@@ -23,6 +23,12 @@ export default {
     return {
       number: '',
       errmsg: ''
+    }
+  },
+  computed: {
+    _number () {
+      return this.number.replace(/\s/g,'')
+        .replace(/[^\d]/g,'').replace(/(\d{4})(?=\d)/g,'$1 ')
     }
   },
   methods: {
