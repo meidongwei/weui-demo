@@ -1,4 +1,4 @@
-# weui-demo
+# wx-membership-card
 
 npm install
 
