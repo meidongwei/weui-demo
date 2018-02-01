@@ -25,7 +25,9 @@
         <div class="weui-cell__bd">
           <p>姓名</p>
         </div>
-        <div class="weui-cell__ft">{{ memberName }}</div>
+        <div v-if="memberName !== 'undefined' && birthday !== 'null'"
+          class="weui-cell__ft">{{ memberName }}</div>
+        <div v-else class="weui-cell__ft"></div>
       </router-link>
       <router-link :to="{name: 'updateInfo'}"
         class="weui-cell weui-cell_access">
@@ -44,7 +46,7 @@
           <p>生日</p>
         </div>
         <div class="weui-cell__ft">
-          <p v-if="birthday !== 'undefined' && birthday !== null">{{ birthday }}</p>
+          <p v-if="birthday !== 'undefined' && birthday !== 'null'">{{ birthday }}</p>
           <p v-else>请选择</p>
         </div>
       </router-link>

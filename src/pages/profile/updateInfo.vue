@@ -9,7 +9,7 @@
         <div class="weui-cell__bd">
           <input class="weui-input" type="text"
             style="text-align:right;"
-            v-model="memberName"
+            v-model="memberName" :disabled="disabled"
             >
         </div>
       </div>
@@ -34,7 +34,7 @@
         </div>
         <div class="weui-cell__bd">
           <p class="weui-cell__ft"
-            @click="showPicker"
+            @click="flag && showPicker()"
             >{{ birthday }}</p>
         </div>
       </div>
@@ -93,7 +93,9 @@ export default {
       isShowNameNull: false,
       isShowSexNull: false,
       isShowBirthdayNull: false,
-      errmsg: ''
+      errmsg: '',
+      disabled: false,
+      flag: true
     }
   },
   // 使用 split() 方法去掉字符串中的“年月日”
@@ -135,14 +137,24 @@ export default {
       })
     },
     getDatas () {
-      this.memberName = localStorage.getItem('memberName')
+      // 判断有姓名的话，就设置 input 为 disabled 状态
+      if (localStorage.getItem('memberName') !== 'null' && localStorage.getItem('memberName') !== '') {
+        this.memberName = localStorage.getItem('memberName')
+        this.disabled = true
+      } else {
+        this.memberName = ''
+        this.disabled = false
+      }
       this.sex = Number(localStorage.getItem('sex'))
       if (localStorage.getItem('birthday') === 'undefined') {
         this.birthday = '请选择'
-      } else if (localStorage.getItem('birthday') === null) {
+        this.flag = true
+      } else if (localStorage.getItem('birthday') === 'null') {
         this.birthday = '请选择'
+        this.flag = true
       } else {
         this.birthday = localStorage.getItem('birthday')
+        this.flag = false
       }
       this.memberid = Number(localStorage.getItem('memberid'))
       // 2018-01-18 转 2018年1月18日

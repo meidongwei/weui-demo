@@ -9,7 +9,7 @@ Mock.mock(/getWxUserinfo/, {
   'res': {
     'theme|1': ['#32b16c','#327cb1','#313131'],
 		'cardface': getLogoImg(),
-    'membername|1': ['李小明','张小飞','王小红'],
+    'membername': ['李小明','张小飞','王小红', '', null],
     'mgname|1': ['普通会员','高级会员','铂金会员'],
     'logo': getLogoImg(),
     'memberno': '@integer(1000000000000000, 9999999999999999)',
@@ -18,7 +18,7 @@ Mock.mock(/getWxUserinfo/, {
 		'memberid': '@integer(1, 5000)',
 		'mobile|1': ['1850311@integer(1000,9999)', undefined],
 		'sex|1': [1,2],
-		'birthday|1': ['2018年01月02日', undefined]
+		'birthday|1': ['2018年01月02日', undefined, null]
   }
 })
 Mock.mock(/userSendcode/, {
