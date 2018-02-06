@@ -10,6 +10,7 @@ import updatePhone2 from '@/pages/profile/updatePhone2'
 import updateInfo from '@/pages/profile/updateInfo'
 import updatePwd from '@/pages/profile/updatePwd'
 import qrCode from '@/pages/qrCode'
+import saleTicket from '@/pages/saleTicket'
 
 Vue.use(Router)
 
@@ -69,6 +70,11 @@ export default new Router({
       path: '/updatePwd',
       name: 'updatePwd',
       component: updatePwd
+    },
+    {
+      path: '/saleTicket',
+      name: 'saleTicket',
+      component: saleTicket
     }
   ]
 })

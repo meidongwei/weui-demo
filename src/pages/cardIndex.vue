@@ -1,23 +1,25 @@
 <template>
   <div>
     <!-- card -->
-    <div :style="[{backgroundImage: 'url(' + imgUrl + ')' }]" class="card">
-      <div class="card-header">
-        <div class="card-logo-box">
-          <div class="card-logo">
-            <img :src="cardLogoSrc" alt="logo">
+    <div class="card-wrap">
+      <div :style="[{backgroundImage: 'url(' + imgUrl + ')' }]" class="card">
+        <div class="card-header">
+          <div class="card-logo-box">
+            <div class="card-logo">
+              <img :src="cardLogoSrc" alt="logo">
+            </div>
+            <div class="card-words">
+              <h3>{{ memberName }}</h3>
+              <p>{{ cardType }}</p>
+            </div>
           </div>
-          <div class="card-words">
-            <h3>{{ memberName }}</h3>
-            <p>{{ cardType }}</p>
-          </div>
+          <router-link to="/qrCode" class="card-qrcode-box">
+            <icon name="qrcode" scale="2" style="color:#fff;"></icon>
+          </router-link>
         </div>
-        <router-link to="/qrCode" class="card-qrcode-box">
-          <icon name="qrcode" scale="2" style="color:#fff;"></icon>
-        </router-link>
-      </div>
-      <div class="card-num-box">
-        <p>{{ cardNum }}</p>
+        <div class="card-num-box">
+          <p>{{ cardNum }}</p>
+        </div>
       </div>
     </div>
     <!-- 积分和预存 -->
@@ -41,6 +43,14 @@
           <span>完善信息</span>
         </div>
       </router-link>
+      <router-link to="/saleTicket" class="weui-cell weui-cell_access">
+        <div class="weui-cell__bd">
+          <p>优惠券</p>
+        </div>
+        <div class="weui-cell__ft">
+          <span style="color: #de3939;">2</span>张
+        </div>
+      </router-link>
       <router-link to="/consume" class="weui-cell weui-cell_access">
         <div class="weui-cell__bd">
           <p>消费查询</p>
@@ -62,7 +72,7 @@
     </div>
     <!-- 按钮 -->
     <a class="weui-btn weui-btn_plain-primary"
-      style="width: 188px;"
+      style="width: 188px; margin-bottom: 50px;"
       href="javascript:;">进入微信卡包</a>
 
 
@@ -153,11 +163,15 @@ export default {
 </script>
 
 <style scoped>
+.card-wrap {
+  padding: 0 24px;
+}
 .card {
-  width: 325px;
+  /* width: 325px; */
+  width: 100%;
   height: 194px;
   border-radius: 5px;
-  margin: 20px auto 20px;
+  margin: 30px auto;
   box-shadow: 0 0 2px lightgray;
   background-size: 100% 100%;
   background-repeat: no-repeat;
@@ -213,14 +227,17 @@ export default {
 .score > p,
 .prestore > p {
   color: #757575;
-  font-size: 14px;
+  font-size: 14pt;
 }
 .score > h3,
 .prestore > h3 {
   color: #282828;
-  font-size: 24px;
+  font-size: 24pt;
 }
 .score {
   border-right: 1px solid #e5e5e5;
+}
+.weui-cells .weui-cell {
+  height: 35px;
 }
 </style>
