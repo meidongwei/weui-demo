@@ -36,22 +36,33 @@
         暂无数据 : (
       </span>
     </infinite-loading>
+
+    <!--BEGIN toast-->
+    <toastFalse :isShowToast="isShowMsg">
+      <p>{{ errmsg }}</p>
+    </toastFalse>
+    <!--end toast-->
+
   </div>
 </template>
 <script>
 import axios from 'axios'
 import httpUrl from '@/http_url'
 import InfiniteLoading from 'vue-infinite-loading'
+import toastFalse from '@/components/toastFalse'
 export default {
   components: {
-    InfiniteLoading
+    InfiniteLoading,
+    toastFalse
   },
   data () {
     return {
       coupons: [],
       couponNum: 0,
       pageSize: 5,
-      isTriggerFirstLoad: false
+      isTriggerFirstLoad: false,
+      isShowMsg: false,
+      errmsg: ''
     }
   },
   methods: {
@@ -78,7 +89,11 @@ export default {
               $state.complete()
             }
           } else {
-            console.log(res.data.errmsg)
+            this.errmsg = res.data.errmsg
+            this.isShowMsg = true
+            setTimeout(() => {
+              this.isShowMsg = false
+            }, 2000)
           }
         })
         .catch(err => console.log(err))

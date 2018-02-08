@@ -77,11 +77,11 @@
 
 
 
-      <!--BEGIN toast-->
-      <toastFalse :isShowToast="isShowMsg">
-        <p>{{ errmsg }}</p>
-      </toastFalse>
-      <!--end toast-->
+    <!--BEGIN toast-->
+    <toastFalse :isShowToast="isShowMsg">
+      <p>{{ errmsg }}</p>
+    </toastFalse>
+    <!--end toast-->
 
 
 
@@ -115,8 +115,7 @@ export default {
       isShowMsg: false,
       errmsg: '',
       // coupons1 未使用的优惠券
-      // coupons2 已使用的优惠券
-      // coupons3 已过期的优惠券
+      // couponNum1 未使用的优惠券数量
       coupons1: [],
       couponNum1: 0,
       pageSize: 5,
