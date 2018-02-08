@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="background: #fff;height: 100%;padding-top: 20px;">
     <!-- card -->
     <div class="card-wrap">
       <div :style="[{backgroundImage: 'url(' + imgUrl + ')' }]" class="card">
@@ -23,7 +23,7 @@
       </div>
     </div>
     <!-- 积分和预存 -->
-    <div class="weui-flex">
+    <div class="weui-flex scoreBox">
       <div class="weui-flex__item score">
         <p>积分</p>
         <h3>{{ score }}</h3>
@@ -34,32 +34,32 @@
       </div>
     </div>
     <!-- 带说明、跳转的列表项 -->
-    <div class="weui-cells" style="margin-bottom: 20px;">
+    <div class="weui-cells" style="margin-bottom: 20px;margin-top: 0;">
       <router-link to="/profile" class="weui-cell weui-cell_access">
         <div class="weui-cell__bd">
-          <p>个人资料</p>
+          <p style="font-size:14pt;">个人资料</p>
         </div>
         <div class="weui-cell__ft">
-          <span>完善信息</span>
+          <span style="font-size:12pt;">完善信息</span>
         </div>
       </router-link>
-      <router-link to="/saleTicket" class="weui-cell weui-cell_access">
+      <router-link to="/coupon" class="weui-cell weui-cell_access">
         <div class="weui-cell__bd">
-          <p>优惠券</p>
+          <p style="font-size:14pt;">优惠券</p>
         </div>
-        <div class="weui-cell__ft">
-          <span style="color: #de3939;">2</span>张
+        <div class="weui-cell__ft"  style="font-size:12pt;">
+          <span style="color: #de3939;">{{ couponNum1 }}</span>张
         </div>
       </router-link>
       <router-link to="/consume" class="weui-cell weui-cell_access">
         <div class="weui-cell__bd">
-          <p>消费查询</p>
+          <p style="font-size:14pt;">消费查询</p>
         </div>
         <div class="weui-cell__ft"></div>
       </router-link>
       <router-link to="/recharge" class="weui-cell weui-cell_access">
         <div class="weui-cell__bd">
-          <p>充值查询</p>
+          <p style="font-size:14pt;">充值查询</p>
         </div>
         <div class="weui-cell__ft"></div>
       </router-link>
@@ -113,7 +113,13 @@ export default {
       sex: 0,
       birthday: '',
       isShowMsg: false,
-      errmsg: ''
+      errmsg: '',
+      // coupons1 未使用的优惠券
+      // coupons2 已使用的优惠券
+      // coupons3 已过期的优惠券
+      coupons1: [],
+      couponNum1: 0,
+      pageSize: 5,
     }
   },
   methods: {
@@ -132,7 +138,6 @@ export default {
           this.mobile = res.data.res.mobile
           this.sex = res.data.res.sex
           this.birthday = res.data.res.birthday
-          this.handleStorage()
         } else {
           this.errmsg = res.data.errmsg
           this.isShowMsg = true
@@ -143,6 +148,32 @@ export default {
       })
       .catch(err => console.log(err))
     },
+    getCouponList () {
+      let a = {}
+      a.memberid = this.memberid
+      a.pageNo = Math.ceil(this.coupons1.length / this.pageSize) + 1
+      a.pageSize = this.pageSize
+      a.status = 0
+
+      let param = new URLSearchParams()
+      param.append("bizContent", JSON.stringify(a))
+
+      axios.post(httpUrl.getCouponList, param)
+        .then(res => {
+          if (res.data.errcode === 0) {
+            this.coupons1 = res.data.res.coupons
+            this.couponNum1 = res.data.res.rowCount
+            this.handleStorage()
+          } else {
+            this.errmsg = res.data.errmsg
+            this.isShowMsg = true
+            setTimeout(() => {
+              this.isShowMsg = false
+            }, 2000)
+          }
+        })
+        .catch(err => console.log(err))
+    },
     handleStorage () {
       if (typeof(Storage) !== "undefined") {
         localStorage.memberName = this.memberName
@@ -151,6 +182,8 @@ export default {
         localStorage.mobile = this.mobile
         localStorage.sex = this.sex
         localStorage.birthday = this.birthday
+        localStorage.coupons1 = JSON.stringify(this.coupons1)
+        localStorage.couponNum1 = this.couponNum1
       } else {
         console.log('对不起，您的浏览器不支持 web 存储')
       }
@@ -158,20 +191,21 @@ export default {
   },
   created () {
     this.getCardDatas()
+    this.getCouponList()
   }
 }
 </script>
 
 <style scoped>
 .card-wrap {
-  padding: 0 24px;
+  padding: 0 25px;
 }
 .card {
-  /* width: 325px; */
+  /* width: 330pt; */
   width: 100%;
   height: 194px;
   border-radius: 5px;
-  margin: 30px auto;
+  margin: 0 auto 14px;
   box-shadow: 0 0 2px lightgray;
   background-size: 100% 100%;
   background-repeat: no-repeat;
@@ -224,15 +258,24 @@ export default {
 .prestore {
   text-align: center;
 }
+.scoreBox {
+  margin-bottom: 14px;
+}
 .score > p,
 .prestore > p {
   color: #757575;
   font-size: 14pt;
+  height: 14pt;
+  line-height: 14pt;
+  margin-bottom: 6pt;
 }
 .score > h3,
 .prestore > h3 {
   color: #282828;
-  font-size: 24pt;
+  font-size: 20pt;
+  font-weight: normal;
+  height: 20pt;
+  line-height: 20pt;
 }
 .score {
   border-right: 1px solid #e5e5e5;

@@ -10,7 +10,10 @@ import updatePhone2 from '@/pages/profile/updatePhone2'
 import updateInfo from '@/pages/profile/updateInfo'
 import updatePwd from '@/pages/profile/updatePwd'
 import qrCode from '@/pages/qrCode'
-import saleTicket from '@/pages/saleTicket'
+import coupon from '@/pages/coupon'
+import coupon1 from '@/pages/coupon/coupon1'
+import coupon2 from '@/pages/coupon/coupon2'
+import coupon3 from '@/pages/coupon/coupon3'
 
 Vue.use(Router)
 
@@ -72,9 +75,27 @@ export default new Router({
       component: updatePwd
     },
     {
-      path: '/saleTicket',
-      name: 'saleTicket',
-      component: saleTicket
+      path: '/coupon',
+      name: 'coupon',
+      component: coupon,
+      redirect: '/coupon/coupon1',
+      children: [
+        {
+          path: 'coupon1',
+          name: 'coupon1',
+          component: coupon1
+        },
+        {
+          path: 'coupon2',
+          name: 'coupon2',
+          component: coupon2
+        },
+        {
+          path: 'coupon3',
+          name: 'coupon3',
+          component: coupon3
+        }
+      ]
     }
   ]
 })

@@ -89,16 +89,27 @@ Mock.mock(/getSuiStoreDatas/, {
 	}
 })
 
-Mock.mock(/getSaleTicketsList/, {
-	'errcode': 0,
-	'errmsg': '错误信息',
-  'res': {
-		'getSaleTicketsList|10': [
-			{
-				'suiName|1': ['渝乡辣婆婆广安店','老酒川菜坊西直门店','河北人家中山店'],
-		    'flag|1': [1, 2, 3],
-		    'suiText': '@ctitle(10, 15)'
-			}
-		]
+Mock.mock(/getCouponList/, {
+	"errcode": 0,
+	"errmsg": "错误信息",
+	"res": {
+		"rowCount": 2,
+		"coupons": [{
+			"couponname":"100元代金券",
+			"deductamount":3890,
+			"type":0,
+			"useflag":0,
+			"useamount":10000,
+			"startdate":"2018-01-01",
+			"enddate":"2018-01-31"
+		},{
+			"couponname":"地三鲜菜品券",
+			"deductamount":5270,
+			"type":1,
+			"useflag":1,
+			"useamount":10000,
+			"startdate":"2018-01-01",
+			"enddate":"2018-01-31"
+		}]
 	}
 })
