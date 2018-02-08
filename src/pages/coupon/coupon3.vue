@@ -3,7 +3,7 @@
     <div v-for="item in coupons" class="item">
       <div class="left" v-if="item.type === 0">
         <div>
-          ¥3
+          ¥
           <span style="font-size: 30px;">
             {{ parseInt(item.deductamount/100) }}
           </span>
