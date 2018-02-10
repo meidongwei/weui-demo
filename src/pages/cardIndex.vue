@@ -117,8 +117,7 @@ export default {
       // coupons1 未使用的优惠券
       // couponNum1 未使用的优惠券数量
       coupons1: [],
-      couponNum1: 0,
-      pageSize: 5,
+      couponNum1: 0
     }
   },
   methods: {
@@ -150,8 +149,8 @@ export default {
     getCouponList () {
       let a = {}
       a.memberid = this.memberid
-      a.pageNo = Math.ceil(this.coupons1.length / this.pageSize) + 1
-      a.pageSize = this.pageSize
+      a.pageNo = 1
+      a.pageSize = 5
       a.status = 0
 
       let param = new URLSearchParams()
@@ -281,5 +280,8 @@ export default {
 }
 .weui-cells .weui-cell {
   height: 35px;
+}
+.weui-cell {
+  padding: 10px 25px;
 }
 </style>

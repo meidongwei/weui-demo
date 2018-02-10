@@ -68,7 +68,7 @@ export default {
   methods: {
     infiniteHandler ($state) {
       let a = {}
-      a.memberid = localStorage.getItem('memberid')
+      a.memberid = Number(localStorage.getItem('memberid'))
       a.pageNo = Math.ceil(this.coupons.length / this.pageSize) + 1
       a.pageSize = this.pageSize
       a.status = 1
@@ -113,12 +113,12 @@ export default {
   padding: 10px 0;
   height: 100px;
   box-sizing: border-box;
-  border-left: 4px dotted red;
+  border-left: 4px dotted #999999;
   position: relative;
 }
 .item:before {
   content: '';
-  background-color: red;
+  background-color: #999999;
   height: 100px;
   width: 2px;
   position: absolute;
@@ -133,7 +133,7 @@ export default {
   align-items: center;
   flex-grow: 0;
   flex-shrink: 0;
-  color: red;
+  color: #999999;
 }
 .item .right {
   padding: 0 10px;
@@ -145,6 +145,7 @@ export default {
 .item .right h3 {
   font-size: 18px;
   font-weight: normal;
+  color: #999999;
 }
 .item .right .text {
   color: #c1c1c1;

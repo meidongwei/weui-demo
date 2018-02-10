@@ -20,44 +20,61 @@
       </div>
     </div>
 
+    <!--BEGIN toast-->
+    <toastFalse :isShowToast="isShowMsg">
+      <p>{{ errmsg }}</p>
+    </toastFalse>
+    <!--end toast-->
+
     </div>
   </div>
 </template>
 <script>
 import axios from 'axios'
 import httpUrl from '@/http_url'
+import toastFalse from '@/components/toastFalse'
 export default {
+  components: {
+    toastFalse
+  },
   data () {
     return {
-      // coupons1 未使用的优惠券
-      // coupons2 已使用的优惠券
-      // coupons3 已过期的优惠券
-      // coupons1: [],
-      // coupons2: [],
-      // coupons3: [],
-      // couponNum1 未使用优惠券数量
-      // couponNum2 已使用优惠券数量
-      // couponNum3 已过期优惠券数量
-      couponNum1: 0,
-      couponNum2: 0,
-      couponNum3: 0,
+      // coupons1: [], // 未使用的优惠券
+      // coupons2: [], // 已使用的优惠券
+      // coupons3: [], // 已过期的优惠券
+      couponNum1: 0, // 未使用优惠券数量
+      couponNum2: 0, // 已使用优惠券数量
+      couponNum3: 0, // 已过期优惠券数量
       // 加载状态
-      loadingToast: true
+      loadingToast: true,
+      isShowMsg: false,
+      errmsg: ''
     }
   },
   methods: {
     getCoupons2and3 () {
+      let memberid
+      // location.search 可以截取到: ?memberid=123123
+      // 判断浏览器地址是否包含查询参数
+      // 如果包含就取参数的 value 值赋给 memberid
+      // 如果不包含，就从本地取 memberid
+      if (location.search !== '') {
+        memberid = Number(location.search.split('=')[1])
+      } else {
+        memberid = Number(localStorage.getItem('memberid'))
+      }
+
       let a = {}
-      a.memberid = localStorage.getItem('memberid')
+      a.memberid = memberid
       a.pageNo = 1
       a.pageSize = 5
       a.status = 1
 
       let b = {}
-      b.memberid = localStorage.getItem('memberid')
+      b.memberid = memberid
       b.pageNo = 1
       b.pageSize = 5
-      b.status = 1
+      b.status = 2
 
       let paramA = new URLSearchParams()
       let paramB = new URLSearchParams()
@@ -75,13 +92,21 @@ export default {
             this.couponNum2 = resA.data.res.rowCount
             localStorage.coupons2 = JSON.stringify(resA.data.res.coupons)
           } else {
-            console.log(resA.data.errmsg)
+            this.errmsg = res.data.errmsg
+            this.isShowMsg = true
+            setTimeout(() => {
+              this.isShowMsg = false
+            }, 2000)
           }
           if (resB.data.errcode === 0) {
             this.couponNum3 = resA.data.res.rowCount
             localStorage.coupons3 = JSON.stringify(resA.data.res.coupons)
           } else {
-            console.log(resB.data.errmsg)
+            this.errmsg = res.data.errmsg
+            this.isShowMsg = true
+            setTimeout(() => {
+              this.isShowMsg = false
+            }, 2000)
           }
         })
       )

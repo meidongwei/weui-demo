@@ -68,7 +68,7 @@ export default {
   methods: {
     infiniteHandler ($state) {
       let a = {}
-      a.memberid = localStorage.getItem('memberid')
+      a.memberid = Number(localStorage.getItem('memberid'))
       a.pageNo = Math.ceil(this.coupons.length / this.pageSize) + 1
       a.pageSize = this.pageSize
       a.status = 0
