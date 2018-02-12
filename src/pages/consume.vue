@@ -4,15 +4,15 @@
     <div dis-hover v-for="(item, index) in consumeList" :key="index" class="segment"
       :class="[item.status == 1 ? 'green' : 'red']">
       <div class="header">
-        <h3 v-if="item.status == 1">消费金额：{{ (item.balance/100 + item.credit + item.payamount/100).toFixed(2) }}元</h3>
-        <h3 v-else style="color: #eb6941;">取消消费：{{ (item.balance/100 + item.credit + item.payamount/100).toFixed(2) }}元</h3>
-        <span>{{ item.finaltime }}</span>
+        <h3 v-if="item.status == 1">消费金额：<span>{{ (item.balance/100 + item.credit + item.payamount/100).toFixed(2) }}</span></h3>
+        <h3 v-else>取消消费：<span style="color: #eb6941;">{{ (item.balance/100 + item.credit + item.payamount/100).toFixed(2) }}</span></h3>
+        <span>{{ showDate(item.finaltime) }}</span>
       </div>
       <div class="address">消费门店：{{ item.ognname }}</div>
       <ul class="else">
-        <li>预存支付：{{ (item.balance/100).toFixed(2) }}元</li>
-        <li>积分支付：{{ item.credit }}元</li>
-        <li>其他支付：{{ (item.payamount/100).toFixed(2) }}元</li>
+        <li>预存支付：{{ (item.balance/100).toFixed(2) }}</li>
+        <li>积分支付：{{ item.credit }}</li>
+        <li>其他支付：{{ (item.payamount/100).toFixed(2) }}</li>
       </ul>
     </div>
     <!-- end 循环 -->
@@ -21,11 +21,11 @@
     <infinite-loading spinner="waveDots"
       @infinite="infiniteHandler">
       <span slot="no-more">
-        没有更多信息了 : (
+        没有更多信息了
       </span>
-      <span slot="no-results" style="display: flex; justify-content: center;">
-        <!-- 暂无数据 : ( -->
-        <img style="margin-top: 390px;" src="../assets/no-datas.png" alt="no-datas">
+      <span slot="no-results" style="display: flex; justify-content: center; align-items:center;">
+        <div></div>
+        <img style="width: 120px;margin-top: 150px;" src="../assets/no-datas.png" alt="no-datas"/>
       </span>
     </infinite-loading>
 
@@ -61,8 +61,18 @@ export default {
     }
   },
   methods: {
+    // 时间戳转日期
+    showDate (str) {
+      let date = new Date(str)//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+      // let Y = date.getFullYear() + '-'
+      let M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-'
+      let D = date.getDate() + ' '
+      let h = date.getHours() + ':'
+      let m = date.getMinutes()
+      // let s = date.getSeconds()
+      return M+D+h+m
+    },
     infiniteHandler($state) {
-
       let bizContent = {}
       bizContent.cno = localStorage.getItem('memberno')
       bizContent.pageNo = Math.ceil(this.consumeList.length / this.pageSize) + 1
@@ -118,8 +128,15 @@ export default {
 }
 .header > h3 {
   font-size: 16px;
+  color: #333333;
+  margin-bottom: 5px;
+  font-weight: normal;
+}
+.header > h3 > span {
+  font-size: 18px;
   color: #45c38a;
   margin-bottom: 5px;
+  font-weight: normal;
 }
 .header > span {
   font-size: 12px;

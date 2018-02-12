@@ -1,18 +1,18 @@
 <template>
-  <div>
+  <div style="padding-top: 10px;">
     <!-- 带说明、跳转的列表项 -->
-    <div class="weui-cells" style="margin-bottom: 20px;">
-      <div class="weui-cell">
+    <div class="weui-cells" style="margin-bottom:20px;">
+      <div class="weui-cell" style="position: relative;">
         <div class="weui-cell__bd">
           <p>手机</p>
         </div>
         <input class="weui-input" type="text"
           v-model="mobile" placeholder="请输入新手机号"
-          style="width: 170px; text-align:right;font-size: 14px;">
+          style="width: 170px; text-align:right;font-size: 14px;
+          position:absolute;right:100px;">
         <a @click="handleSendCode" class="weui-btn_plain-primary"
-          style="margin-left: 10px;padding-left: 6px;
-          padding-right: 6px;padding-top:3px;
-          padding-bottom:3px;font-size:12px;border-radius:3px;"
+          style="padding:4px 6px;font-size:12px;border-radius:3px;
+          position:absolute;right:15px;"
           href="javascript:;">发送验证码</a>
       </div>
       <div class="weui-cell">

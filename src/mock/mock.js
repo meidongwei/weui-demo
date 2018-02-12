@@ -37,10 +37,10 @@ Mock.mock(/getConsumeList/, {
 	'res|2': [
 		{
 	    'ognname|1': ['渝乡辣婆婆','老酒川菜坊','河北人家'],
-	    'balance': '@integer(10,99)',
+	    'balance': '@integer(1,9)000',
 	    'credit': '@integer(10,99)',
-			'payamount': '@integer(10,99)',
-			'finaltime': '@date("yyyy-MM-dd")',
+			'payamount': '@integer(1,9)000',
+			'finaltime': 1518407827000,
 			'status|1': [1,2]
 		}
 	]
@@ -67,9 +67,9 @@ Mock.mock(/getChargeList/, {
   'res|2': [
 		{
 	    'ognname|1': ['渝乡辣婆婆','老酒川菜坊','河北人家'],
-	    'finaltime': '@date("yyyy-MM-dd")',
-	    'money': '@integer(10,99)',
-			'rewardmoney': '@integer(10,99)',
+	    'finaltime': 1518407827000,
+	    'money': '@integer(1,9)000',
+			'rewardmoney': '@integer(1,9)00',
 			'status|1': [1,2]
 		}
 	]

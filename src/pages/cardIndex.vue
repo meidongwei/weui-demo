@@ -1,5 +1,5 @@
 <template>
-  <div style="background: #fff;height: 100%;padding-top: 20px;">
+  <div class="index-wrap">
     <!-- card -->
     <div class="card-wrap">
       <div :style="[{backgroundImage: 'url(' + imgUrl + ')' }]" class="card">
@@ -137,6 +137,8 @@ export default {
           this.mobile = res.data.res.mobile
           this.sex = res.data.res.sex
           this.birthday = res.data.res.birthday
+          this.getCouponList()
+          this.handleStorage()
         } else {
           this.errmsg = res.data.errmsg
           this.isShowMsg = true
@@ -162,7 +164,6 @@ export default {
           if (res.data.errcode === 0) {
             this.coupons1 = res.data.res.coupons
             this.couponNum1 = res.data.res.rowCount
-            this.handleStorage()
           } else {
             this.errmsg = res.data.errmsg
             this.isShowMsg = true
@@ -190,14 +191,18 @@ export default {
   },
   created () {
     this.getCardDatas()
-    this.getCouponList()
   }
 }
 </script>
 
 <style scoped>
+.index-wrap {
+  background: #fff;
+  height: 100%;
+}
 .card-wrap {
   padding: 0 25px;
+  padding-top: 20px;
 }
 .card {
   /* width: 330pt; */

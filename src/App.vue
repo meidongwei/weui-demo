@@ -10,6 +10,8 @@ export default {
 <style>
 html, body {
   background-color: #f8f8f8;
+  margin:0;
+  height:100%;
 }
 .weui-btn_plain-primary {
   color: #32b16c;
@@ -32,8 +34,8 @@ html, body {
   color: #b3b3b3;
 }
 .weui-cells {
-  margin-top: 10px;
-  margin-bottom: 0;
+  margin-top: 0;
+  margin-bottom: 10px;
 }
 .weui-cells .weui-cell__bd {
   font-size: 14px;

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding-top: 10px;">
     <!-- 带说明、跳转的列表项 -->
     <!-- <div v-if="mobile!=='undefined'" class="weui-cells" style="margin-bottom: 20px;">
       <router-link :to="{name: 'updatePhone'}" class="weui-cell weui-cell_access">
@@ -158,5 +158,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>
