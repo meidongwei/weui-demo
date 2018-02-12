@@ -7,16 +7,15 @@ Mock.mock(/getWxUserinfo/, {
 	'errcode': 0,
 	'errmsg': '错误信息',
   'res': {
-    'theme|1': ['#32b16c','#327cb1','#313131'],
 		'cardface': getLogoImg(),
-    'membername|1': ['李小明','张小飞','王小红', '', null],
+    'membername|1': ['李小明','张小飞','王小红', ''],
     'mgname|1': ['普通会员','高级会员','铂金会员'],
     'logo': getLogoImg(),
     'memberno': '@integer(1000000000000000, 9999999999999999)',
     'integral': '@integer(1000, 2000)',
     'balance': '@integer(2000, 5000)',
 		'memberid': '@integer(1, 5000)',
-		'mobile|1': ['1850311@integer(1000,9999)', undefined],
+		'mobile|1': ['1850311@integer(1000,9999)'],
 		'sex|1': [1,2],
 		'birthday|1': ['2018年01月02日', undefined, null]
   }

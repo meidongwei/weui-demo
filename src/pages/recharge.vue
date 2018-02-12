@@ -21,8 +21,9 @@
       <span slot="no-more">
         没有更多信息了 : (
       </span>
-      <span slot="no-results">
-        暂无数据 : (
+      <span slot="no-results" style="display: flex; justify-content: center;">
+        <!-- 暂无数据 : ( -->
+        <img style="margin-top: 390px;" src="../assets/no-datas.png" alt="no-datas">
       </span>
     </infinite-loading>
 

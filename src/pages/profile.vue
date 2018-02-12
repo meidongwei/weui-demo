@@ -9,7 +9,7 @@
         <div class="weui-cell__ft">{{ mobile }}</div>
       </router-link>
     </div> -->
-    <div class="weui-cells" style="margin-bottom: 20px;">
+    <div class="weui-cells">
       <router-link :to="{name: 'updatePhone2'}" class="weui-cell weui-cell_access">
         <div class="weui-cell__bd">
           <p>手机</p>
@@ -19,13 +19,13 @@
       </router-link>
     </div>
     <!-- 带说明、跳转的列表项 -->
-    <div class="weui-cells" style="margin-bottom: 20px;">
+    <div class="weui-cells">
       <router-link :to="{name: 'updateInfo'}"
         class="weui-cell weui-cell_access">
         <div class="weui-cell__bd">
           <p>姓名</p>
         </div>
-        <div v-if="memberName !== 'undefined' && birthday !== 'null'"
+        <div v-if="memberName !== 'undefined' && memberName !== 'null'"
           class="weui-cell__ft">{{ memberName }}</div>
         <div v-else class="weui-cell__ft"></div>
       </router-link>
@@ -52,7 +52,7 @@
       </router-link>
     </div>
     <!-- 带说明、跳转的列表项 -->
-    <div class="weui-cells" style="margin-bottom: 20px;">
+    <div class="weui-cells">
       <router-link to="/updatePwd" class="weui-cell weui-cell_access">
         <div class="weui-cell__bd">
           <p>修改会员卡密码</p>
@@ -157,5 +157,6 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+
 </style>

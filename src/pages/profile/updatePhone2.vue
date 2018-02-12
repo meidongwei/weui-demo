@@ -8,11 +8,11 @@
         </div>
         <input class="weui-input" type="text"
           v-model="mobile" placeholder="请输入新手机号"
-          style="width: 170px; text-align:right;">
+          style="width: 170px; text-align:right;font-size: 14px;">
         <a @click="handleSendCode" class="weui-btn_plain-primary"
           style="margin-left: 10px;padding-left: 6px;
           padding-right: 6px;padding-top:3px;
-          padding-bottom:3px;font-size:14px;border-radius:3px;"
+          padding-bottom:3px;font-size:12px;border-radius:3px;"
           href="javascript:;">发送验证码</a>
       </div>
       <div class="weui-cell">

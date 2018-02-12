@@ -18,13 +18,11 @@
           <p>性别</p>
         </div>
         <div class="weui-cell__bd" style="display:flex;justify-content:flex-end;">
-          <div style="margin-right: 15px;">
-            <input v-model.number="sex" value="1" id="boy" type="radio"/>
-            <label for="boy">男</label>
-          </div>
-          <div>
-            <input v-model.number="sex" value="2" id="girl" type="radio"/>
-            <label for="girl">女</label>
+          <div class="radio-box" v-for="(item, index) in radios" :key="index">
+            <input v-model="sex" class="input-radio" id="boy"
+              :checked="item.isChecked" type="radio" name="radio" :value="item.value"/>
+            <label class="radio" :class="{'on':item.isChecked}"
+              for="boy" @click="changeSex(index)">{{ item.label }}</label>
           </div>
         </div>
       </div>
@@ -77,7 +75,6 @@ import httpUrl from '@/http_url'
 // 引入 weui.js 目前用于 picker
 import 'weui'
 import weui from 'weui.js'
-// weui.alert('alert')
 export default {
   components: {
     toastSuccess,
@@ -86,7 +83,7 @@ export default {
   data () {
     return {
       memberName: '',
-      sex: 0,
+      sex: 1,
       birthday: '',
       isShowUpdateSuccess: false,
       isShowUpdateFalse: false,
@@ -95,22 +92,21 @@ export default {
       isShowBirthdayNull: false,
       errmsg: '',
       disabled: false,
-      flag: true
+      flag: true,
+      radios: [
+        {
+          label: '男',
+          value: 1,
+          isChecked: false
+        },
+        {
+          label: '女',
+          value: 2,
+          isChecked: false
+        }
+      ]
     }
   },
-  // 使用 split() 方法去掉字符串中的“年月日”
-  // 年：a[0]  月：b[0]  日：c[0]
-  // computed: {
-  //   year () {
-  //     return this.birthday.split('年')
-  //   },
-  //   month () {
-  //     return this.year[1].split('月')
-  //   },
-  //   day () {
-  //     return this.month[1].split('日')
-  //   }
-  // },
   methods: {
     showPicker () {
       const _this = this
@@ -146,6 +142,11 @@ export default {
         this.disabled = false
       }
       this.sex = Number(localStorage.getItem('sex'))
+      for (let i=0;i<this.radios.length;i++) {
+        if (this.radios[i].value === this.sex) {
+          this.radios[i].isChecked = true
+        }
+      }
       if (localStorage.getItem('birthday') === 'undefined') {
         this.birthday = '请选择'
         this.flag = true
@@ -157,10 +158,6 @@ export default {
         this.flag = false
       }
       this.memberid = Number(localStorage.getItem('memberid'))
-      // 2018-01-18 转 2018年1月18日
-      // var dateArr = this.birthday.split('-')
-      // this.birthday = dateArr[0]+'年'+dateArr[1].replace(/^0/,'')
-      //   +'月'+dateArr[2].replace(/^0/,'')+'日'
     },
     submitInfo () {
       if (this.memberName === 'undefined' || this.memberName === null ) {
@@ -222,6 +219,14 @@ export default {
         }
       })
       .catch(err => console.log(err))
+    },
+    changeSex (index) {
+      // 取消所有选中项
+      this.radios.forEach((item) => {
+        item.isChecked = false
+      })
+      this.radios[index].isChecked = true
+      this.sex = this.radios[index].value
     }
   },
   created () {
@@ -231,4 +236,23 @@ export default {
 </script>
 
 <style scoped>
+.radio-box {
+  margin-left: 10px;
+}
+.input-radio {
+  margin: 3px 3px 0px 5px;
+  display: none;
+}
+.radio {
+  padding-left: 20px;
+  cursor: pointer;
+  background: url('../../assets/1.png') no-repeat left top;
+  background-size: 15px;
+  background-repeat: no-repeat;
+  background-position: left top;
+}
+.on {
+  background: url('../../assets/2.png') no-repeat left top;
+  background-size: 15px;
+}
 </style>

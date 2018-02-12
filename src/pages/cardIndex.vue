@@ -37,29 +37,29 @@
     <div class="weui-cells" style="margin-bottom: 20px;margin-top: 0;">
       <router-link to="/profile" class="weui-cell weui-cell_access">
         <div class="weui-cell__bd">
-          <p style="font-size:14pt;">个人资料</p>
+          <p style="font-size:15px;">个人资料</p>
         </div>
         <div class="weui-cell__ft">
-          <span style="font-size:12pt;">完善信息</span>
+          <span style="font-size:13px;">完善信息</span>
         </div>
       </router-link>
-      <router-link to="/coupon" class="weui-cell weui-cell_access">
+      <!-- <router-link to="/coupon" class="weui-cell weui-cell_access">
         <div class="weui-cell__bd">
-          <p style="font-size:14pt;">优惠券</p>
+          <p style="font-size:15px;">优惠券</p>
         </div>
-        <div class="weui-cell__ft"  style="font-size:12pt;">
+        <div class="weui-cell__ft"  style="font-size:13px;">
           <span style="color: #de3939;">{{ couponNum1 }}</span>张
         </div>
-      </router-link>
+      </router-link> -->
       <router-link to="/consume" class="weui-cell weui-cell_access">
         <div class="weui-cell__bd">
-          <p style="font-size:14pt;">消费查询</p>
+          <p style="font-size:15px;">消费查询</p>
         </div>
         <div class="weui-cell__ft"></div>
       </router-link>
       <router-link to="/recharge" class="weui-cell weui-cell_access">
         <div class="weui-cell__bd">
-          <p style="font-size:14pt;">充值查询</p>
+          <p style="font-size:15px;">充值查询</p>
         </div>
         <div class="weui-cell__ft"></div>
       </router-link>
@@ -72,7 +72,8 @@
     </div>
     <!-- 按钮 -->
     <a class="weui-btn weui-btn_plain-primary"
-      style="width: 188px; margin-bottom: 50px;"
+      style="width: 190px; margin-bottom: 50px;
+      font-size: 17px; height: 40px; line-height: 40px;"
       href="javascript:;">进入微信卡包</a>
 
 
@@ -202,7 +203,7 @@ export default {
   /* width: 330pt; */
   width: 100%;
   height: 194px;
-  border-radius: 5px;
+  border-radius: 9px;
   margin: 0 auto 14px;
   box-shadow: 0 0 2px lightgray;
   background-size: 100% 100%;
@@ -246,11 +247,21 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  /* position: relative; */
 }
+/* .card-qrcode-box icon {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+} */
 .card-num-box {
   padding: 16px;
   font-size: 22px;
   color: #fff;
+}
+.card-num-box p {
+  height: 22px;
+  line-height: 22px;
 }
 .score,
 .prestore {
@@ -262,18 +273,18 @@ export default {
 .score > p,
 .prestore > p {
   color: #757575;
-  font-size: 14pt;
-  height: 14pt;
-  line-height: 14pt;
-  margin-bottom: 6pt;
+  font-size: 14px;
+  height: 14px;
+  line-height: 14px;
+  margin-bottom: 6px;
 }
 .score > h3,
 .prestore > h3 {
   color: #282828;
-  font-size: 20pt;
+  font-size: 24px;
   font-weight: normal;
-  height: 20pt;
-  line-height: 20pt;
+  height: 24px;
+  line-height: 24px;
 }
 .score {
   border-right: 1px solid #e5e5e5;

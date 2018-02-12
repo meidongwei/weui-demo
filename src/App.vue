@@ -31,4 +31,31 @@ html, body {
   background: rgba(231, 231, 231, 0.8);
   color: #b3b3b3;
 }
+.weui-cells {
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+.weui-cells .weui-cell__bd {
+  font-size: 14px;
+  color: #333333;
+}
+.weui-cells .weui-cell__ft {
+  font-size: 14px;
+  color: #666666;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+  color: #999; opacity:1;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+  color: #999;
+  opacity:1;
+}
+input:-ms-input-placeholder{
+  color: #999;
+  opacity:1;
+}
+input::-webkit-input-placeholder{
+  color: #999;
+  opacity:1;
+}
 </style>
