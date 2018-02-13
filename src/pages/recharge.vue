@@ -10,7 +10,7 @@
       </div>
       <div class="address">充值门店：{{ item.ognname }}</div>
       <ul class="else">
-        <li>实冲金额：{{ ((item.money)/100).toFixed(2) }}</li>
+        <li>实充金额：{{ ((item.money)/100).toFixed(2) }}</li>
         <li>奖励金额：{{ (item.rewardmoney)/100 }}</li>
       </ul>
     </div>
