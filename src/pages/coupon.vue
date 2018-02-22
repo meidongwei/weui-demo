@@ -53,19 +53,19 @@ export default {
   },
   methods: {
     getCoupons2and3 () {
-      let memberid
+      // let memberid
       // location.search 可以截取到: ?memberid=123123
       // 判断浏览器地址是否包含查询参数
       // 如果包含就取参数的 value 值赋给 memberid
       // 如果不包含，就从本地取 memberid
-      if (location.search !== '') {
-        memberid = Number(location.search.split('=')[1])
-      } else {
-        memberid = Number(localStorage.getItem('memberid'))
-      }
+      // if (location.search !== '') {
+      //   memberid = Number(location.search.split('=')[1])
+      // } else {
+      //   memberid = Number(localStorage.getItem('memberid'))
+      // }
 
       let a = {}
-      a.memberid = memberid
+      a.memberid = Number(localStorage.getItem('memberid'))
       a.pageNo = 1
       a.pageSize = 5
       a.status = 1
