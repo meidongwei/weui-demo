@@ -136,10 +136,12 @@ export default {
       // 判断有姓名的话，就设置 input 为 disabled 状态
       if (localStorage.getItem('memberName') !== 'null' && localStorage.getItem('memberName') !== '') {
         this.memberName = localStorage.getItem('memberName')
-        this.disabled = true
+        // 2018年3月1日修改：姓名不可更改 -> 姓名可以更改
+        // 更改内容：注释下面代码
+        // this.disabled = true
       } else {
         this.memberName = ''
-        this.disabled = false
+        // this.disabled = false
       }
       this.sex = Number(localStorage.getItem('sex'))
       for (let i=0;i<this.radios.length;i++) {

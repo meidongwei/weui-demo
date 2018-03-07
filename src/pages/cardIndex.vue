@@ -71,10 +71,10 @@
       </router-link> -->
     </div>
     <!-- 按钮 -->
-    <a class="weui-btn weui-btn_plain-primary"
+    <!-- <a class="weui-btn weui-btn_plain-primary"
       style="width: 190px; margin-bottom: 50px;
       font-size: 17px; height: 40px; line-height: 40px;"
-      href="javascript:;">进入微信卡包</a>
+      href="javascript:;">进入微信卡包</a> -->
 
 
 

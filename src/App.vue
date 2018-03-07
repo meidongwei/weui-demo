@@ -17,6 +17,9 @@ html, body {
   color: #32b16c;
   border: 1px solid #32b16c;
 }
+.weui-btn_plain-primary:active {
+  background-color: #e8e8e8;
+}
 .loadmore {
   display: flex;
   justify-content: center;
