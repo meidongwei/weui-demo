@@ -2,10 +2,12 @@
   <div class="page">
     <div class="bg-white">
       <h4>请让服务员扫码收款</h4>
-      <barcode :value="_number" width="1" font-options="bold"
+      <!-- width="1" -->
+      <barcode :value="number" font-options="bold"
         style="margin: 20px 0;">
         加载中...
       </barcode>
+      <p class="m-code">{{ this._number }}</p>
       <p>{{ errmsg }}</p>
       <qriously :value="number" :size="155"></qriously>
     </div>
@@ -43,6 +45,7 @@ export default {
       .then(res => {
         if (res.data.errcode === 0) {
           this.number = res.data.res.payno
+          console.log(this.number)
         } else {
           this.errmsg = res.data.errmsg
         }
@@ -72,11 +75,23 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative
 }
 .bg-white > h4 {
   font-weight: normal;
   color: #999;
   text-align: center;
   padding-top: 30px;
+}
+.m-code {
+  /* border: 1px solid red; */
+  position: absolute;
+  top: 190px;
+  background-color: #fff;
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+  letter-spacing: 2px;
+  font-size: 18px;
 }
 </style>
