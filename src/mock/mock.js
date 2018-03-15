@@ -1,7 +1,7 @@
 import Mock from 'mockjs'
 
 function getLogoImg () {
-	return Mock.Random.image('100x100', Mock.Random.hex())
+	return Mock.Random.image('659x427', Mock.Random.hex())
 }
 Mock.mock(/getWxUserinfo/, {
 	'errcode': 0,

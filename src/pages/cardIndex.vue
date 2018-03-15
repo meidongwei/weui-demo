@@ -2,7 +2,8 @@
   <div class="index-wrap">
     <!-- card -->
     <div class="card-wrap">
-      <div :style="[{backgroundImage: 'url(' + imgUrl + ')' }]" class="card">
+      <div class="card">
+        <img :src="imgUrl" alt="logo">
         <div class="card-header">
           <div class="card-logo-box">
             <div class="card-logo">
@@ -205,19 +206,22 @@ export default {
   padding-top: 20px;
 }
 .card {
-  /* width: 330pt; */
   width: 100%;
-  height: 194px;
+  height: 100%;
   border-radius: 9px;
   margin: 0 auto 14px;
-  box-shadow: 0 0 2px lightgray;
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  position: relative;
+}
+.card img {
+  display: block;
+  width: 100%;
+  border-radius: 9px;
 }
 .card-header {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  box-sizing: border-box;
   padding: 16px;
   display: flex;
   justify-content: space-between;
@@ -252,17 +256,14 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* position: relative; */
 }
-/* .card-qrcode-box icon {
-  position: absolute;
-  left: 10px;
-  top: 10px;
-} */
 .card-num-box {
   padding: 16px;
   font-size: 22px;
   color: #fff;
+  letter-spacing: 1px;
+  position: absolute;
+  bottom: 0;
 }
 .card-num-box p {
   height: 22px;
