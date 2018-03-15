@@ -208,6 +208,7 @@ export default {
           this.isShowUpdateSuccess = true
           setTimeout(() => {
             this.isShowUpdateSuccess = false
+            this.$router.push({ name: 'profile' })
           }, 2000)
           localStorage.memberName = this.memberName
           localStorage.sex = this.sex

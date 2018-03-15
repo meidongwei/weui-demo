@@ -122,6 +122,7 @@ export default {
           this.isShowSuccess = true
           setTimeout(() => {
             this.isShowSuccess = false
+            this.$router.push({ name: 'profile' })
           }, 2000)
         } else {
           this.errmsg = res.data.errmsg

@@ -91,6 +91,7 @@ export default {
     }
   },
   methods: {
+
     handleCheckNewMobile () {
       // 验证表单
       if (!this.checkForm()) {
@@ -115,6 +116,7 @@ export default {
           this.isShowCheckSuccess = true
           setTimeout(() => {
             this.isShowCheckSuccess = false
+            this.$router.push({ name: 'profile' })
           }, 2000)
           localStorage.mobile = this.mobile
         } else {
@@ -127,6 +129,7 @@ export default {
       })
       .catch(err => console.log(err))
     },
+
     // 验证手机号、验证码不为空
     checkForm () {
       if (this.mobile.length === 0) {
@@ -145,6 +148,7 @@ export default {
       }
       return true
     },
+
     // 验证手机号11位
     checkPhone () {
       let re = /^1\d{10}$/
@@ -157,6 +161,7 @@ export default {
       }
       return true
     },
+
     handleSendCode () {
       if (this.mobile.length !== 0) {
         if (this.checkPhone()) {
