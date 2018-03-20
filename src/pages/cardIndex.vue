@@ -3,7 +3,7 @@
     <!-- card -->
     <div class="card-wrap">
       <div class="card">
-        <img :src="imgUrl" alt="logo">
+        <img :src="imgUrl">
         <div class="card-header">
           <div class="card-logo-box">
             <div class="card-logo">
@@ -97,6 +97,7 @@ import axios from 'axios'
 import httpUrl from '@/http_url'
 import toastFalse from '@/components/toastFalse'
 export default {
+  name: 'cardIndex',
   components: {
     Icon,
     toastFalse
@@ -127,6 +128,12 @@ export default {
       axios.get(httpUrl.getCardDatas)
       .then(res => {
         if (res.data.errcode === 0) {
+
+          // if (localStorage.getItem('imgUrl') === null) {
+          //   this.imgUrl = res.data.res.cardface
+          // } else {
+          //   this.imgUrl = localStorage.getItem('imgUrl')
+          // }
           this.imgUrl = res.data.res.cardface
           this.memberName = res.data.res.membername
           this.cardType = res.data.res.mgname
@@ -178,6 +185,7 @@ export default {
     handleStorage () {
       if (typeof(Storage) !== "undefined") {
         localStorage.memberName = this.memberName
+        // localStorage.imgUrl = this.imgUrl
         localStorage.memberid = this.memberid
         localStorage.memberno = this.cardNum
         localStorage.mobile = this.mobile
@@ -202,17 +210,39 @@ export default {
   height: 100%;
 }
 .card-wrap {
-  padding: 0 25px;
-  padding-top: 20px;
+  padding: 20px 25px 14px 25px;
 }
 .card {
   width: 100%;
   height: 100%;
   border-radius: 9px;
-  margin: 0 auto 14px;
   position: relative;
 }
-.card img {
+@media (max-width: 320px) {
+  .card-wrap .card > img {
+    height: 175px;
+  }
+}
+@media (min-width: 321px) {
+  .card-wrap .card > img {
+    height: 210.58px;
+  }
+}
+@media (min-width: 414px) {
+  .card-wrap .card > img {
+    height: 235.84px;
+  }
+}
+@media (min-width: 768px) {
+  .card-wrap {
+    display: flex;
+    justify-content: center;
+  }
+  .card-wrap .card {
+    width: 325px;
+  }
+}
+.card > img {
   display: block;
   width: 100%;
   border-radius: 9px;

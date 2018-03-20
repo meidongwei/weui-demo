@@ -11,7 +11,7 @@ Vue.use(VueQriously)
 import 'vue-qriously/dist/vue-qriously.js'
 
 // 引入 mockjs 只在开发环境中使用，生产环境中可以注释掉
-import mock from './mock/mock'
+// import mock from './mock/mock'
 
 Vue.config.productionTip = false
 

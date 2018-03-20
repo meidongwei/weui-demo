@@ -45,7 +45,6 @@ export default {
       .then(res => {
         if (res.data.errcode === 0) {
           this.number = res.data.res.payno
-          console.log(this.number)
         } else {
           this.errmsg = res.data.errmsg
         }
