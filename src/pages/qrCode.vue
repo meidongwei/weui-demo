@@ -38,10 +38,10 @@ export default {
       let bizContent = {}
       bizContent.memberid = Number(localStorage.getItem('memberid'))
 
-      let param = new URLSearchParams()
-      param.append("bizContent", JSON.stringify(bizContent))
+      // let param = new URLSearchParams()
+      // param.append("bizContent", JSON.stringify(bizContent))
 
-      axios.post(httpUrl.getPayNum, param)
+      axios.get(httpUrl.getPayNum+"&bizContent="+JSON.stringify(bizContent))
       .then(res => {
         if (res.data.errcode === 0) {
           this.number = res.data.res.payno

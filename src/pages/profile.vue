@@ -46,7 +46,7 @@
           <p>生日</p>
         </div>
         <div class="weui-cell__ft">
-          <p v-if="birthday !== 'undefined' && birthday !== 'null'">{{ birthday }}</p>
+          <p v-if="birthday && birthday != 'undefined' && birthday != 'null'">{{ birthday }}</p>
           <p v-else>请选择</p>
         </div>
       </router-link>
@@ -124,10 +124,10 @@ export default {
       let bizContent = {}
       bizContent.cno = localStorage.getItem('memberno')
 
-      let param = new URLSearchParams()
-      param.append("bizContent", JSON.stringify(bizContent))
+      // let param = new URLSearchParams()
+      // param.append("bizContent", JSON.stringify(bizContent))
 
-      axios.post(httpUrl.resetPwd, param)
+      axios.get(httpUrl.resetPwd+"&bizContent="+JSON.stringify(bizContent))
       .then(res => {
         if (res.data.errcode === 0) {
           this.isShowResetSuccess = true

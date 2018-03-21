@@ -107,10 +107,10 @@ export default {
       bizContent.mobile = this.mobile
       bizContent.cno = localStorage.getItem('memberno')
 
-      let param = new URLSearchParams()
-      param.append("bizContent", JSON.stringify(bizContent))
+      // let param = new URLSearchParams()
+      // param.append("bizContent", JSON.stringify(bizContent))
 
-      axios.post(httpUrl.updateMemberMobile, param)
+      axios.get(httpUrl.updateMemberMobile+"&bizContent="+JSON.stringify(bizContent))
       .then(res => {
         if (res.data.errcode === 0) {
           this.isShowCheckSuccess = true
@@ -169,10 +169,10 @@ export default {
           bizContent.mobile = this.mobile
           bizContent.cno = localStorage.getItem('memberno')
 
-          let param = new URLSearchParams()
-          param.append("bizContent", JSON.stringify(bizContent))
+          // let param = new URLSearchParams()
+          // param.append("bizContent", JSON.stringify(bizContent))
 
-          axios.post(httpUrl.handleSendCode, param)
+          axios.get(httpUrl.handleSendCode+"&bizContent="+JSON.stringify(bizContent))
           .then(res => {
             if (res.data.errcode === 0) {
               this.isShowSendCodeSuccess = true
@@ -190,6 +190,7 @@ export default {
             }
           })
           .catch(err => console.log(err))
+
         }
       } else {
         this.isShowPhoneNull = true

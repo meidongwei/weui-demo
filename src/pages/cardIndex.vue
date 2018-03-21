@@ -164,10 +164,10 @@ export default {
       a.pageSize = 5
       a.status = 0
 
-      let param = new URLSearchParams()
-      param.append("bizContent", JSON.stringify(a))
+      // let param = new URLSearchParams()
+      // param.append("bizContent", JSON.stringify(a))
 
-      axios.post(httpUrl.getCouponList, param)
+      axios.get(httpUrl.getCouponList+"&bizContent="+JSON.stringify(bizContent))
         .then(res => {
           if (res.data.errcode === 0) {
             this.coupons1 = res.data.res.coupons
@@ -185,7 +185,6 @@ export default {
     handleStorage () {
       if (typeof(Storage) !== "undefined") {
         localStorage.memberName = this.memberName
-        // localStorage.imgUrl = this.imgUrl
         localStorage.memberid = this.memberid
         localStorage.memberno = this.cardNum
         localStorage.mobile = this.mobile

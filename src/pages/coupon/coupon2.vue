@@ -73,10 +73,10 @@ export default {
       a.pageSize = this.pageSize
       a.status = 1
 
-      let param = new URLSearchParams()
-      param.append("bizContent", JSON.stringify(a))
+      // let param = new URLSearchParams()
+      // param.append("bizContent", JSON.stringify(a))
 
-      axios.post(httpUrl.getCouponList, param)
+      axios.get(httpUrl.getCouponList+"&bizContent="+JSON.stringify(a))
         .then(res => {
           if (res.data.errcode === 0) {
             this.couponNum = res.data.res.rowCount

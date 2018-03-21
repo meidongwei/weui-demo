@@ -113,10 +113,10 @@ export default {
       bizContent.oldpwd = this.oldPwd
       bizContent.newpwd = this.password
 
-      let param = new URLSearchParams()
-      param.append("bizContent", JSON.stringify(bizContent))
+      // let param = new URLSearchParams()
+      // param.append("bizContent", JSON.stringify(bizContent))
 
-      axios.post(httpUrl.submitPwd, param)
+      axios.get(httpUrl.submitPwd+"&bizContent="+JSON.stringify(bizContent))
       .then(res => {
         if (res.data.errcode === 0) {
           this.isShowSuccess = true

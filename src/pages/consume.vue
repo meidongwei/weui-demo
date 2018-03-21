@@ -78,10 +78,10 @@ export default {
       bizContent.pageNo = Math.ceil(this.consumeList.length / this.pageSize) + 1
       bizContent.pageSize = this.pageSize
 
-      let param = new URLSearchParams()
-      param.append("bizContent", JSON.stringify(bizContent))
+      // let param = new URLSearchParams()
+      // param.append("bizContent", JSON.stringify(bizContent))
 
-      axios.post(httpUrl.getConsumeDatas, param)
+      axios.get(httpUrl.getConsumeDatas+"&bizContent="+JSON.stringify(bizContent))
       .then(res => {
         if (res.data.errcode === 0) {
           if (res.data.res.length > 0) {

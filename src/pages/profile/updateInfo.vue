@@ -32,8 +32,7 @@
         </div>
         <div class="weui-cell__bd">
           <p class="weui-cell__ft"
-            @click="flag && showPicker()"
-            >{{ birthday }}</p>
+            @click="flag && showPicker()">{{ birthday }}</p>
         </div>
       </div>
     </div>
@@ -149,7 +148,10 @@ export default {
           this.radios[i].isChecked = true
         }
       }
-      if (localStorage.getItem('birthday') === 'undefined') {
+      if (!localStorage.getItem('birthday')) {
+        this.birthday = '请选择'
+        this.flag = true
+      } else if (localStorage.getItem('birthday') === 'undefined') {
         this.birthday = '请选择'
         this.flag = true
       } else if (localStorage.getItem('birthday') === 'null') {
@@ -199,10 +201,10 @@ export default {
 
       bizContent.birthday = birthday
 
-      let param = new URLSearchParams()
-      param.append("bizContent", JSON.stringify(bizContent))
+      // let param = new URLSearchParams()
+      // param.append("bizContent", JSON.stringify(bizContent))
 
-      axios.post(httpUrl.submitInfo, param)
+      axios.get(httpUrl.submitInfo+"&bizContent="+JSON.stringify(bizContent))
       .then(res => {
         if (res.data.errcode === 0) {
           this.isShowUpdateSuccess = true

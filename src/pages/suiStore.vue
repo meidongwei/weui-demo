@@ -56,10 +56,10 @@ export default {
       let bizContent = {}
       bizContent.page = this.suiStoreList.length / this.number + 1
 
-      let param = new URLSearchParams()
-      param.append("bizContent", JSON.stringify(bizContent))
+      // let param = new URLSearchParams()
+      // param.append("bizContent", JSON.stringify(bizContent))
 
-      axios.post(httpUrl.getSuiStoreDatas, param)
+      axios.get(httpUrl.getSuiStoreDatas+"&bizContent="+JSON.stringify(bizContent))
       .then(res => {
         if (res.data.errcode == 0) {
           this.suiStoreList = this.suiStoreList.concat(res.data.res.getSuiStoreList)

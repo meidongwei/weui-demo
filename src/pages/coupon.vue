@@ -76,14 +76,14 @@ export default {
       b.pageSize = 5
       b.status = 2
 
-      let paramA = new URLSearchParams()
-      let paramB = new URLSearchParams()
-      paramA.append("bizContent", JSON.stringify(a))
-      paramB.append("bizContent", JSON.stringify(b))
+      // let paramA = new URLSearchParams()
+      // let paramB = new URLSearchParams()
+      // paramA.append("bizContent", JSON.stringify(a))
+      // paramB.append("bizContent", JSON.stringify(b))
 
       axios.all([
-        axios.post(httpUrl.getCouponList, paramA),
-        axios.post(httpUrl.getCouponList, paramB)
+        axios.get(httpUrl.getCouponList+"&bizContent="+JSON.stringify(a)),
+        axios.get(httpUrl.getCouponList+"&bizContent="+JSON.stringify(b))
       ])
       .then(
         axios.spread((resA, resB) => {
