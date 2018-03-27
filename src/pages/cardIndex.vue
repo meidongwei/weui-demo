@@ -167,7 +167,7 @@ export default {
       // let param = new URLSearchParams()
       // param.append("bizContent", JSON.stringify(a))
 
-      axios.get(httpUrl.getCouponList+"&bizContent="+JSON.stringify(bizContent))
+      axios.get(httpUrl.getCouponList+"&bizContent="+JSON.stringify(a))
         .then(res => {
           if (res.data.errcode === 0) {
             this.coupons1 = res.data.res.coupons
