@@ -69,21 +69,32 @@ export default {
       a.pageNo = 1
       a.pageSize = 5
       a.status = 1
+      let data1 = 'bizContent=' + JSON.stringify(a)
 
       let b = {}
       b.memberid = memberid
       b.pageNo = 1
       b.pageSize = 5
       b.status = 2
-
-      // let paramA = new URLSearchParams()
-      // let paramB = new URLSearchParams()
-      // paramA.append("bizContent", JSON.stringify(a))
-      // paramB.append("bizContent", JSON.stringify(b))
+      let data2 = 'bizContent=' + JSON.stringify(b)
 
       axios.all([
-        axios.get(httpUrl.getCouponList+"&bizContent="+JSON.stringify(a)),
-        axios.get(httpUrl.getCouponList+"&bizContent="+JSON.stringify(b))
+        axios({
+          method: "post",
+          url: httpUrl.getCouponList,
+          headers: {
+            'Content-type': 'application/x-www-form-urlencoded'
+          },
+          data: data1
+        }),
+        axios({
+          method: "post",
+          url: httpUrl.getCouponList,
+          headers: {
+            'Content-type': 'application/x-www-form-urlencoded'
+          },
+          data: data2
+        })
       ])
       .then(
         axios.spread((resA, resB) => {

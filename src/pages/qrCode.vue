@@ -35,13 +35,18 @@ export default {
   },
   methods: {
     getPayNum () {
-      let bizContent = {}
-      bizContent.memberid = Number(localStorage.getItem('memberid'))
-
-      // let param = new URLSearchParams()
-      // param.append("bizContent", JSON.stringify(bizContent))
-
-      axios.get(httpUrl.getPayNum+"&bizContent="+JSON.stringify(bizContent))
+      let a = {
+        memberid: Number(localStorage.getItem('memberid'))
+      }
+      let data = 'bizContent=' + JSON.stringify(a)
+      axios({
+        method: 'post',
+        url: httpUrl.getPayNum,
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded'
+        },
+        data: data
+      })
       .then(res => {
         if (res.data.errcode === 0) {
           this.number = res.data.res.payno

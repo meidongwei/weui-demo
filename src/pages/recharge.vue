@@ -69,15 +69,20 @@ export default {
       return M+D+h+m
     },
     infiniteHandler($state) {
-      let bizContent = {}
-      bizContent.cno = localStorage.getItem('memberno')
-      bizContent.pageNo = Math.ceil(this.rechargeList.length / this.pageSize) + 1
-      bizContent.pageSize = this.pageSize
-
-      // let param = new URLSearchParams()
-      // param.append("bizContent", JSON.stringify(bizContent))
-
-      axios.get(httpUrl.getRechargeDatas+"&bizContent="+JSON.stringify(bizContent))
+      let a = {
+        cno: localStorage.getItem('memberno'),
+        pageNo: Math.ceil(this.rechargeList.length / this.pageSize) + 1,
+        pageSize: this.pageSize
+      }
+      let data = 'bizContent=' + JSON.stringify(a)
+      axios({
+        method: 'post',
+        url: httpUrl.getRechargeDatas,
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded'
+        },
+        data: data
+      })
       .then(res => {
         if (res.data.errcode === 0) {
           if (res.data.res.length > 0) {

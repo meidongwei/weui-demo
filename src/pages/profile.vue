@@ -10,7 +10,7 @@
       </router-link>
     </div> -->
     <div class="weui-cells">
-      <router-link :to="{name: 'updatePhone2'}" class="weui-cell weui-cell_access">
+      <router-link :to="{name: 'updatePhone'}" class="weui-cell weui-cell_access">
         <div class="weui-cell__bd">
           <p>手机</p>
         </div>
@@ -121,13 +121,18 @@ export default {
       // this.birthday = this.birthday && new Date(this.birthday * 1000)
     },
     resetPwd () {
-      let bizContent = {}
-      bizContent.cno = localStorage.getItem('memberno')
-
-      // let param = new URLSearchParams()
-      // param.append("bizContent", JSON.stringify(bizContent))
-
-      axios.get(httpUrl.resetPwd+"&bizContent="+JSON.stringify(bizContent))
+      let a = {
+        cno: localStorage.getItem('memberno')
+      }
+      let data = 'bizContent=' + JSON.stringify(a)
+      axios({
+        method: 'post',
+        url: httpUrl.resetPwd,
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded'
+        },
+        data: data
+      })
       .then(res => {
         if (res.data.errcode === 0) {
           this.isShowResetSuccess = true

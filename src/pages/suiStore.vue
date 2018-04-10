@@ -53,13 +53,18 @@ export default {
   },
   methods: {
     infiniteHandler($state) {
-      let bizContent = {}
-      bizContent.page = this.suiStoreList.length / this.number + 1
-
-      // let param = new URLSearchParams()
-      // param.append("bizContent", JSON.stringify(bizContent))
-
-      axios.get(httpUrl.getSuiStoreDatas+"&bizContent="+JSON.stringify(bizContent))
+      let a = {
+        page: this.suiStoreList.length / this.number + 1
+      }
+      let data = 'bizContent=' + JSON.stringify(a)
+      axios({
+        method: 'post',
+        url: httpUrl.getSuiStoreDatas,
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded'
+        },
+        data: data
+      })
       .then(res => {
         if (res.data.errcode == 0) {
           this.suiStoreList = this.suiStoreList.concat(res.data.res.getSuiStoreList)

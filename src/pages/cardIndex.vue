@@ -158,29 +158,34 @@ export default {
       .catch(err => console.log(err))
     },
     getCouponList () {
-      let a = {}
-      a.memberid = this.memberid
-      a.pageNo = 1
-      a.pageSize = 5
-      a.status = 0
-
-      // let param = new URLSearchParams()
-      // param.append("bizContent", JSON.stringify(a))
-
-      axios.get(httpUrl.getCouponList+"&bizContent="+JSON.stringify(a))
-        .then(res => {
-          if (res.data.errcode === 0) {
-            this.coupons1 = res.data.res.coupons
-            this.couponNum1 = res.data.res.rowCount
-          } else {
-            this.errmsg = res.data.errmsg
-            this.isShowMsg = true
-            setTimeout(() => {
-              this.isShowMsg = false
-            }, 2000)
-          }
-        })
-        .catch(err => console.log(err))
+      let a = {
+        memberid: this.memberid,
+        pageNo: 1,
+        pageSize: 5,
+        status: 0
+      }
+      let data = "bizContent=" + JSON.stringify(a)
+      axios({
+        method: "post",
+        url: httpUrl.getCouponList,
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded'
+        },
+        data: data
+      })
+      .then(res => {
+        if (res.data.errcode === 0) {
+          this.coupons1 = res.data.res.coupons
+          this.couponNum1 = res.data.res.rowCount
+        } else {
+          this.errmsg = res.data.errmsg
+          this.isShowMsg = true
+          setTimeout(() => {
+            this.isShowMsg = false
+          }, 2000)
+        }
+      })
+      .catch(err => console.log(err))
     },
     handleStorage () {
       if (typeof(Storage) !== "undefined") {

@@ -113,10 +113,20 @@ export default {
       bizContent.oldpwd = this.oldPwd
       bizContent.newpwd = this.password
 
-      // let param = new URLSearchParams()
-      // param.append("bizContent", JSON.stringify(bizContent))
-
-      axios.get(httpUrl.submitPwd+"&bizContent="+JSON.stringify(bizContent))
+      let a = {
+        cno: localStorage.getItem('memberno'),
+        oldpwd: this.oldPwd,
+        newpwd: this.password
+      }
+      let data = 'bizContent=' + JSON.stringify(a)
+      axios({
+        method: 'post',
+        url: httpUrl.submitPwd,
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded'
+        },
+        data: data
+      })
       .then(res => {
         if (res.data.errcode === 0) {
           this.isShowSuccess = true

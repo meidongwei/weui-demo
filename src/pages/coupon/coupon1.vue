@@ -67,36 +67,41 @@ export default {
   },
   methods: {
     infiniteHandler ($state) {
-      let a = {}
-      a.memberid = Number(localStorage.getItem('memberid'))
-      a.pageNo = Math.ceil(this.coupons.length / this.pageSize) + 1
-      a.pageSize = this.pageSize
-      a.status = 0
-
-      // let param = new URLSearchParams()
-      // param.append("bizContent", JSON.stringify(a))
-
-      axios.get(httpUrl.getCouponList+"&bizContent="+JSON.stringify(a))
-        .then(res => {
-          if (res.data.errcode === 0) {
-            this.couponNum = res.data.res.rowCount
-            if (res.data.res.coupons.length > 0) {
-              this.coupons = this.coupons.concat(res.data.res.coupons)
-              localStorage.coupons1 = JSON.stringify(this.coupons)
-              $state.loaded()
-            } else {
-              // 显示： 没有更多信息了
-              $state.complete()
-            }
+      let a = {
+        memberid: Number(localStorage.getItem('memberid')),
+        pageNo: Math.ceil(this.coupons.length / this.pageSize) + 1,
+        pageSize: this.pageSize,
+        status: 0
+      }
+      let data = 'bizContent=' + JSON.stringify(a)
+      axios({
+        method: 'post',
+        url: httpUrl.getCouponList,
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded'
+        },
+        data: data
+      })
+      .then(res => {
+        if (res.data.errcode === 0) {
+          this.couponNum = res.data.res.rowCount
+          if (res.data.res.coupons.length > 0) {
+            this.coupons = this.coupons.concat(res.data.res.coupons)
+            localStorage.coupons1 = JSON.stringify(this.coupons)
+            $state.loaded()
           } else {
-            this.errmsg = res.data.errmsg
-            this.isShowMsg = true
-            setTimeout(() => {
-              this.isShowMsg = false
-            }, 2000)
+            // 显示： 没有更多信息了
+            $state.complete()
           }
-        })
-        .catch(err => console.log(err))
+        } else {
+          this.errmsg = res.data.errmsg
+          this.isShowMsg = true
+          setTimeout(() => {
+            this.isShowMsg = false
+          }, 2000)
+        }
+      })
+      .catch(err => console.log(err))
     }
   },
   created () {

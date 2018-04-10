@@ -188,10 +188,6 @@ export default {
         return
       }
 
-      let bizContent = {}
-      bizContent.membername = this.memberName
-      bizContent.sex = this.sex
-      bizContent.memberid = this.memberid
       // 2018年01月18日 转换成 2018-01-18
       let result = /^(\d+)年(\d+)月(\d+)日$/.exec(this.birthday)
       let y = result[1]
@@ -199,12 +195,21 @@ export default {
       var d = result[3]
       let birthday = y + '-' + m + '-' + d
 
-      bizContent.birthday = birthday
-
-      // let param = new URLSearchParams()
-      // param.append("bizContent", JSON.stringify(bizContent))
-
-      axios.get(httpUrl.submitInfo+"&bizContent="+JSON.stringify(bizContent))
+      let a = {
+        membername: this.memberName,
+        sex: this.sex,
+        memberid: this.memberid,
+        birthday: birthday
+      }
+      let data = 'bizContent=' + JSON.stringify(a)
+      axios({
+        method: 'post',
+        url: httpUrl.submitInfo,
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded'
+        },
+        data: data
+      })
       .then(res => {
         if (res.data.errcode === 0) {
           this.isShowUpdateSuccess = true
